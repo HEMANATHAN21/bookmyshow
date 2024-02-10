@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.spring.bookmyshow.dao.TheatreAdminDao;
-import com.spring.bookmyshow.entity.Theatre;
 import com.spring.bookmyshow.entity.TheatreAdmin;
 import com.spring.bookmyshow.util.ResponseStructure;
 
@@ -63,7 +62,7 @@ public class TheatreAdminService
 		return null;
 	}
 	
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> updateTheatreAdmin(Theatre theatreAdmin, int theatreAdminId)
+	public ResponseEntity<ResponseStructure<TheatreAdmin>> updateTheatreAdmin(TheatreAdmin theatreAdmin, int theatreAdminId)
 	{
 		TheatreAdmin theatreAdminfind = theatreAdminDao.findTheatreAdmin(theatreAdminId);
 		if(theatreAdminfind != null)
