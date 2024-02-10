@@ -39,7 +39,7 @@ public class TheatreDao
 		Theatre exTheatre = findTheatre(theatreId);
 		if(exTheatre != null)
 		{
-			exTheatre.setTheatreId(theatreId);
+			theatre.setTheatreId(theatreId);
 			return theatreRepo.save(theatre);
 		}
 		return null;

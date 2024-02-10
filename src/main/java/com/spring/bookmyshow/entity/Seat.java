@@ -12,6 +12,7 @@ import lombok.Setter;
 public class Seat 
 {
 	@Id
+	private int seatId;
 	private String seatNumber;
-	private String SeatClass;
+	private SeatType seatType;
 }
