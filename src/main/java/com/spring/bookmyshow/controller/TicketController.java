@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.spring.bookmyshow.entity.Screen;
 import com.spring.bookmyshow.entity.Ticket;
 import com.spring.bookmyshow.service.TicketService;
 import com.spring.bookmyshow.util.ResponseStructure;
@@ -42,8 +40,8 @@ public class TicketController
 	}
 	
 	@PutMapping
-	public ResponseEntity<ResponseStructure<Screen>> updateScreen(@RequestBody Screen screen,@RequestParam int screenId)
+	public ResponseEntity<ResponseStructure<Ticket>> updateTicket(@RequestBody Ticket ticket,@RequestParam int ticketId)
 	{
-		return screenService.updateScreen(screen,screenId);
+		return ticketService.updateTicket(ticket,ticketId);
 	}
 }
