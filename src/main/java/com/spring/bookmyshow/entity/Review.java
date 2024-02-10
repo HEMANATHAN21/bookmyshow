@@ -19,6 +19,6 @@ public class Review
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int reviewId;
 	private String review;
-	private int rating;
+	private double rating;
 	private int userId;
 }
