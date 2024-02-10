@@ -39,7 +39,7 @@ public class UserDao
 		User exUser = findUser(userId);
 		if(exUser != null)
 		{
-			exUser.setUserId(userId);
+			user.setUserId(userId);
 			return userRepo.save(user);
 		}
 		return null;

@@ -38,7 +38,7 @@ public class ReviewDao
 		Review exReview = findReview(reviewId);
 		if(exReview != null)
 		{
-			exReview.setReviewId(reviewId);
+			review.setReviewId(reviewId);
 			return reviewRepo.save(review);
 		}
 		return null;

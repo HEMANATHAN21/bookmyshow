@@ -39,7 +39,7 @@ public class MovieDao
 		Movie exMovie = findMovie(movieId);
 		if(exMovie != null)
 		{
-			exMovie.setMovieId(movieId);
+			movie.setMovieId(movieId);
 			return movieRepo.save(movie);
 		}
 		return null;

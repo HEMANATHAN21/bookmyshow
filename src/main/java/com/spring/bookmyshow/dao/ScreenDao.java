@@ -38,7 +38,7 @@ public class ScreenDao
 		Screen exScreen = findScreen(screenId);
 		if(exScreen != null)
 		{
-			exScreen.setScreenId(screenId);
+			screen.setScreenId(screenId);
 			return screenRepo.save(screen);
 		}
 		return null;

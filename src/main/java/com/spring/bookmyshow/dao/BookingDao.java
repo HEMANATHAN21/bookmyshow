@@ -38,8 +38,8 @@ public class BookingDao
 		Booking exBooking = findBooking(bookingId);
 		if(exBooking != null)
 		{
-			exBooking.setBookingId(bookingId);
-			return bookinRepo.save(exBooking);
+			booking.setBookingId(bookingId);
+			return bookinRepo.save(booking);
 		}
 		return null;
 	}

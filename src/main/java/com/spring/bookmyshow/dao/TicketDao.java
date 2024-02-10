@@ -38,7 +38,7 @@ public class TicketDao
 		Ticket exTicket = findTicket(ticketId);
 		if(exTicket != null)
 		{
-			exTicket.setTicketId(ticketId);
+			ticket.setTicketId(ticketId);
 			return ticketRepo.save(ticket);
 		}
 		return null;

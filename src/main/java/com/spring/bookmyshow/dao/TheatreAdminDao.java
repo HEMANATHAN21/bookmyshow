@@ -40,7 +40,7 @@ public class TheatreAdminDao
 		TheatreAdmin exTheatreAdmin = findTheatreAdmin(theatreAdminId);
 		if(exTheatreAdmin != null)
 		{
-			exTheatreAdmin.setTheatreAdminId(theatreAdminId);
+			theatreAdmin.setTheatreAdminId(theatreAdminId);
 			return theatreAdminRepo.save(theatreAdmin);
 		}
 		return null;
