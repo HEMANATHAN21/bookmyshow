@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.spring.bookmyshow.dto.AdminBookMyShowDto;
 import com.spring.bookmyshow.entity.AdminBookMyShow;
 import com.spring.bookmyshow.service.AdminBookMyShowService;
 import com.spring.bookmyshow.util.ResponseStructure;
@@ -21,25 +23,25 @@ public class AdminBookMyShowController
 	AdminBookMyShowService adminBmsService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<AdminBookMyShow>> saveAdminBookMyShow(@RequestBody AdminBookMyShow adminBookMyShow)
+	public ResponseEntity<ResponseStructure<AdminBookMyShowDto>> saveAdminBookMyShow(@RequestBody AdminBookMyShow adminBookMyShow)
 	{
 		return adminBmsService.saveAdminBookMyShow(adminBookMyShow);
 	}
 	
 	@GetMapping
-	public ResponseEntity<ResponseStructure<AdminBookMyShow>> findAdminBookMyShow(@RequestParam int adminBmsId)
+	public ResponseEntity<ResponseStructure<AdminBookMyShowDto>> findAdminBookMyShow(@RequestParam int adminBmsId)
 	{
 		return adminBmsService.findAdminBookMyShow(adminBmsId);
 	}
 	
 	@DeleteMapping
-	public ResponseEntity<ResponseStructure<AdminBookMyShow>> deleteAdminBookMyShow(@RequestParam int adminBmsId)
+	public ResponseEntity<ResponseStructure<AdminBookMyShowDto>> deleteAdminBookMyShow(@RequestParam int adminBmsId)
 	{
 		return adminBmsService.deleteAdminBookMyShow(adminBmsId);
 	}
 	
 	@PutMapping
-	public ResponseEntity<ResponseStructure<AdminBookMyShow>> updateAdminBookMyShow(@RequestBody AdminBookMyShow adminBookMyShow,@RequestParam int adminBmsId)
+	public ResponseEntity<ResponseStructure<AdminBookMyShowDto>> updateAdminBookMyShow(@RequestBody AdminBookMyShow adminBookMyShow,@RequestParam int adminBmsId)
 	{
 		return adminBmsService.updateAdminBookMyShow(adminBookMyShow,adminBmsId);
 	}
