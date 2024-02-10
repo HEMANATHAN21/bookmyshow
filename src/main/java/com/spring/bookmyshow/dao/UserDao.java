@@ -34,7 +34,7 @@ public class UserDao
 		return user;
 	}
 	
-	public User updateSUser(User user, int userId)
+	public User updateUser(User user, int userId)
 	{
 		User exUser = findUser(userId);
 		if(exUser != null)
