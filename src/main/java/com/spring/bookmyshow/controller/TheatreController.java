@@ -50,4 +50,10 @@ public class TheatreController
 	{
 		return theatreService.assignTheatreAdminToTheatre(theatreId,theatreAdminId);
 	}
+	
+	@PutMapping("addscreen")
+	public ResponseEntity<ResponseStructure<Theatre>> addScreenInTheatre(@RequestParam int theatreId,@RequestParam int screenId)
+	{
+		return theatreService.addScreenInTheatre(theatreId,screenId);
+	}
 }

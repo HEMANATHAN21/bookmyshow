@@ -1,6 +1,5 @@
 package com.spring.bookmyshow.service;
 
-import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
