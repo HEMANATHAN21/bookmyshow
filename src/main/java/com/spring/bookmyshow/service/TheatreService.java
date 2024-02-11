@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.spring.bookmyshow.dao.TheatreAdminDao;
 import com.spring.bookmyshow.dao.TheatreDao;
 import com.spring.bookmyshow.entity.Theatre;
+import com.spring.bookmyshow.entity.TheatreAdmin;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -14,6 +16,9 @@ public class TheatreService
 {
 	@Autowired
 	TheatreDao theatreDao;
+	
+	@Autowired
+	TheatreAdminDao theatreAdminDao;
 	
 	public ResponseEntity<ResponseStructure<Theatre>> saveTheatre(Theatre theatre)
 	{
@@ -79,5 +84,30 @@ public class TheatreService
 			return null;
 		}
 		return null;
+	}
+	
+	public ResponseEntity<ResponseStructure<Theatre>> assignTheatreAdminToTheatre(int theatreId,int theatreAdminId)
+	{
+		Theatre exTheatre = theatreDao.findTheatre(theatreId);
+		if(exTheatre != null)
+		{
+			TheatreAdmin exTheatreAdmin = theatreAdminDao.findTheatreAdmin(theatreAdminId);
+			if(exTheatreAdmin != null)
+			{
+				exTheatre.setTheatreAdmin(exTheatreAdmin);
+				Theatre updatedTheatre = theatreDao.updateTheatre(exTheatre, theatreId);
+				if(updatedTheatre != null)
+				{
+					ResponseStructure<Theatre> structure = new ResponseStructure<>();
+					structure.setMessage("TheatreAdmin Successfully Assigned To Theatre");
+					structure.setStatus(HttpStatus.OK.value());
+					structure.setData(updatedTheatre);
+					return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
+				}
+				return null; //theatre  not updated
+			}
+			return null; //theatre admin not found
+		}
+		return null; //theatre  not found
 	}
 }

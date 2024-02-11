@@ -44,4 +44,10 @@ public class TheatreController
 	{
 		return theatreService.updateTheatre(theatre,theatreId);
 	}
+	
+	@PutMapping("assigntheatre")
+	public ResponseEntity<ResponseStructure<Theatre>> assignTheatreAdminToTheatre(@RequestParam int theatreId,@RequestParam int theatreAdminId)
+	{
+		return theatreService.assignTheatreAdminToTheatre(theatreId,theatreAdminId);
+	}
 }

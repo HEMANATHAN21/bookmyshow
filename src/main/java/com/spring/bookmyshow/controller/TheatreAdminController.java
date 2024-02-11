@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.spring.bookmyshow.dto.TheatreAdminDto;
 import com.spring.bookmyshow.entity.TheatreAdmin;
 import com.spring.bookmyshow.service.TheatreAdminService;
 import com.spring.bookmyshow.util.ResponseStructure;
@@ -22,26 +24,27 @@ public class TheatreAdminController
 	TheatreAdminService theatreAdminService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> saveTheatreAdmin(@RequestBody TheatreAdmin theatreAdmin)
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> saveTheatreAdmin(@RequestBody TheatreAdmin theatreAdmin)
 	{
 		return theatreAdminService.saveTheatreAdmin(theatreAdmin);
 	}
 	
 	@GetMapping
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> findTheatreAdmin(@RequestParam int theatreAdminId)
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> findTheatreAdmin(@RequestParam int theatreAdminId)
 	{
 		return theatreAdminService.findTheatreAdmin(theatreAdminId);
 	}
 	
 	@DeleteMapping
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> deleteTheatreAdmin(@RequestParam int theatreAdminId)
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> deleteTheatreAdmin(@RequestParam int theatreAdminId)
 	{
 		return theatreAdminService.deleteTheatreAdmin(theatreAdminId);
 	}
 	
 	@PutMapping
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> updateTheatreAdmin(@RequestBody TheatreAdmin theatreAdmin,@RequestParam int theatreAdminId)
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> updateTheatreAdmin(@RequestBody TheatreAdmin theatreAdmin,@RequestParam int theatreAdminId)
 	{
 		return theatreAdminService.updateTheatreAdmin(theatreAdmin, theatreAdminId);
 	}
+	
 }

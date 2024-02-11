@@ -11,6 +11,5 @@ public class TheatreAdminDto
 	private int theatreAdminId;
 	private String theatreAdminName;
 	private String theatreAdminEmail;
-	private String theatreAdminPassword;
 	private Theatre adminTheatre;
 }

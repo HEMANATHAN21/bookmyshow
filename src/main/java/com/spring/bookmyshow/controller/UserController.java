@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.spring.bookmyshow.dto.UserDto;
 import com.spring.bookmyshow.entity.User;
 import com.spring.bookmyshow.service.UserService;
 import com.spring.bookmyshow.util.ResponseStructure;
@@ -22,25 +24,25 @@ public class UserController
 	UserService userService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<User>> saveUser(@RequestBody User user)
+	public ResponseEntity<ResponseStructure<UserDto>> saveUser(@RequestBody User user)
 	{
 		return userService.saveUser(user);
 	}
 	
 	@GetMapping
-	public ResponseEntity<ResponseStructure<User>> findUser(@RequestParam int userId)
+	public ResponseEntity<ResponseStructure<UserDto>> findUser(@RequestParam int userId)
 	{
 		return userService.findUser(userId);
 	}
 	
 	@DeleteMapping
-	public ResponseEntity<ResponseStructure<User>> deleteUser(@RequestParam int userId)
+	public ResponseEntity<ResponseStructure<UserDto>> deleteUser(@RequestParam int userId)
 	{
 		return userService.deleteUser(userId);
 	}
 	
 	@PutMapping
-	public ResponseEntity<ResponseStructure<User>> updateUser(@RequestBody User user,@RequestParam int userId)
+	public ResponseEntity<ResponseStructure<UserDto>> updateUser(@RequestBody User user,@RequestParam int userId)
 	{
 		return userService.updateUser(user,userId);
 	}

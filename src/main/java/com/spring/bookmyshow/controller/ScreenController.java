@@ -44,4 +44,10 @@ public class ScreenController
 	{
 		return screenService.updateScreen(screen,screenId);
 	}
+	
+	@PutMapping("updateseatclass")
+	public ResponseEntity<ResponseStructure<Screen>> updateSeatClass(@RequestParam int screenId)
+	{
+		return screenService.updateSeatClass(screenId);
+	}
 }

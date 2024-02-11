@@ -1,5 +1,7 @@
 package com.spring.bookmyshow.service;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,5 +80,28 @@ public class ScreenService
 			return null;
 		}
 		return null;
+	}
+	
+	public ResponseEntity<ResponseStructure<Screen>> updateSeatClass(int screenId)
+	{
+		Screen exScreen = screenDao.findScreen(screenId);
+		if(exScreen != null)
+		{
+			int totalSeatCount = exScreen.getTotalSeatingCount();
+			exScreen.setSeatAclass(new int[(15 * totalSeatCount)/100]);
+			exScreen.setSeatBclass(new int[(30 * totalSeatCount)/100]);
+			exScreen.setSeatCclass(new int[(55 * totalSeatCount)/100]);
+			Screen updatedScreen = screenDao.updateScreen(exScreen, screenId);
+			if(updatedScreen != null)
+			{
+				ResponseStructure<Screen> structure = new ResponseStructure<>();
+				structure.setMessage("Screen Seat Classes Updated");
+				structure.setStatus(HttpStatus.OK.value());
+				structure.setData(updatedScreen);
+				return new ResponseEntity<ResponseStructure<Screen>>(structure,HttpStatus.OK);
+			}
+			return null;//screen seat not updated
+		}
+		return null;//screen not found
 	}
 }

@@ -1,11 +1,14 @@
 package com.spring.bookmyshow.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.spring.bookmyshow.dao.TheatreAdminDao;
+import com.spring.bookmyshow.dao.TheatreDao;
+import com.spring.bookmyshow.dto.TheatreAdminDto;
 import com.spring.bookmyshow.entity.TheatreAdmin;
 import com.spring.bookmyshow.util.ResponseStructure;
 
@@ -14,36 +17,44 @@ public class TheatreAdminService
 {
 	@Autowired
 	TheatreAdminDao theatreAdminDao;
+	@Autowired
+	TheatreDao theatreDao;
 	
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> saveTheatreAdmin(TheatreAdmin theatreAdmin)
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> saveTheatreAdmin(TheatreAdmin theatreAdmin)
 	{
 		TheatreAdmin theatreAdminNew = theatreAdminDao.saveTheatreAdmin(theatreAdmin);
 		if(theatreAdminNew != null)
 		{
-			ResponseStructure<TheatreAdmin> structure = new ResponseStructure<>();
+			TheatreAdminDto dto = new TheatreAdminDto();
+			ModelMapper mapper = new ModelMapper();
+			mapper.map(theatreAdminNew, dto);
+			ResponseStructure<TheatreAdminDto> structure = new ResponseStructure<>();
 			structure.setMessage("TheatreAdmin Created");
 			structure.setStatus(HttpStatus.CREATED.value());
-			structure.setData(theatreAdminNew);
-			return new ResponseEntity<ResponseStructure<TheatreAdmin>>(structure,HttpStatus.CREATED);
+			structure.setData(dto);
+			return new ResponseEntity<ResponseStructure<TheatreAdminDto>>(structure,HttpStatus.CREATED);
 		}
 		return null;
 	}
 	
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> findTheatreAdmin(int theatreAdminId)
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> findTheatreAdmin(int theatreAdminId)
 	{
 		TheatreAdmin theatreAdmin = theatreAdminDao.findTheatreAdmin(theatreAdminId);
 		if(theatreAdmin != null)
 		{
-			ResponseStructure<TheatreAdmin> structure = new ResponseStructure<>();
+			TheatreAdminDto dto = new TheatreAdminDto();
+			ModelMapper mapper = new ModelMapper();
+			mapper.map(theatreAdmin, dto);
+			ResponseStructure<TheatreAdminDto> structure = new ResponseStructure<>();
 			structure.setMessage("TheatreAdmin Founded");
 			structure.setStatus(HttpStatus.FOUND.value());
-			structure.setData(theatreAdmin);
-			return new ResponseEntity<ResponseStructure<TheatreAdmin>>(structure,HttpStatus.FOUND);
+			structure.setData(dto);
+			return new ResponseEntity<ResponseStructure<TheatreAdminDto>>(structure,HttpStatus.FOUND);
 		}
 		return null;
 	}
 	
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> deleteTheatreAdmin(int theatreAdminId)
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> deleteTheatreAdmin(int theatreAdminId)
 	{
 		TheatreAdmin theatreAdmin = theatreAdminDao.findTheatreAdmin(theatreAdminId);
 		if(theatreAdmin != null)
@@ -51,18 +62,21 @@ public class TheatreAdminService
 			TheatreAdmin deletedTheatreAdmin = theatreAdminDao.findTheatreAdmin(theatreAdminId);
 			if(deletedTheatreAdmin != null)
 			{
-				ResponseStructure<TheatreAdmin> structure = new ResponseStructure<>();
+				TheatreAdminDto dto = new TheatreAdminDto();
+				ModelMapper mapper = new ModelMapper();
+				mapper.map(deletedTheatreAdmin, dto);
+				ResponseStructure<TheatreAdminDto> structure = new ResponseStructure<>();
 				structure.setMessage("TheatreAdmin Deleted");
 				structure.setStatus(HttpStatus.OK.value());
-				structure.setData(deletedTheatreAdmin);
-				return new ResponseEntity<ResponseStructure<TheatreAdmin>>(structure,HttpStatus.OK);
+				structure.setData(dto);
+				return new ResponseEntity<ResponseStructure<TheatreAdminDto>>(structure,HttpStatus.OK);
 			}
 			return null;
 		}
 		return null;
 	}
 	
-	public ResponseEntity<ResponseStructure<TheatreAdmin>> updateTheatreAdmin(TheatreAdmin theatreAdmin, int theatreAdminId)
+	public ResponseEntity<ResponseStructure<TheatreAdminDto>> updateTheatreAdmin(TheatreAdmin theatreAdmin, int theatreAdminId)
 	{
 		TheatreAdmin theatreAdminfind = theatreAdminDao.findTheatreAdmin(theatreAdminId);
 		if(theatreAdminfind != null)
@@ -70,14 +84,19 @@ public class TheatreAdminService
 			TheatreAdmin updateTheatreAdmin = theatreAdminDao.updateTheatreAdmin(theatreAdminfind, theatreAdminId);
 			if(updateTheatreAdmin != null)
 			{
-				ResponseStructure<TheatreAdmin> structure = new ResponseStructure<>();
+				TheatreAdminDto dto = new TheatreAdminDto();
+				ModelMapper mapper = new ModelMapper();
+				mapper.map(updateTheatreAdmin, dto);
+				ResponseStructure<TheatreAdminDto> structure = new ResponseStructure<>();
 				structure.setMessage("TheatreAdmin Updated");
 				structure.setStatus(HttpStatus.OK.value());
-				structure.setData(updateTheatreAdmin);
-				return new ResponseEntity<ResponseStructure<TheatreAdmin>>(structure,HttpStatus.OK);
+				structure.setData(dto);
+				return new ResponseEntity<ResponseStructure<TheatreAdminDto>>(structure,HttpStatus.OK);
 			}
 			return null;
 		}
 		return null;
 	}
+	
+	
 }

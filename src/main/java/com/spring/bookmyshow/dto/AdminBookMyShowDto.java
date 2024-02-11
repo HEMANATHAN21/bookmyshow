@@ -13,6 +13,5 @@ public class AdminBookMyShowDto
 	private int adminBmsId;
 	private String adminBmsName;
 	private String adminBmsMail;
-	private String adminBmsPassword;
 	private List<Theatre> BmsTheatres;
 }
