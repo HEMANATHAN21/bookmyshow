@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +27,8 @@ public class Booking
 	private LocalTime showTime;
 	private int ticketCount;
 	private double totalAmount;
+	private SeatType seatType;
+	private String bookingMovieName;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Ticket ticket;
 }
