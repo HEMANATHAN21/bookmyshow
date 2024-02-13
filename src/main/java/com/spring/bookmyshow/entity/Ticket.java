@@ -26,6 +26,7 @@ public class Ticket
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int ticketId;
 	private int ticketCount;
+	private MovieSchedule bookingMovieSchedule;
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Seat> seats;
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

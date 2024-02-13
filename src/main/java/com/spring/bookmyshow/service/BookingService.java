@@ -104,84 +104,99 @@ public class BookingService
 		return null;
 	}
 	
-	public ResponseEntity<ResponseStructure<Booking>> bookingMovie(Booking booking, int userId, int movieId) 
+	public ResponseEntity<ResponseStructure<Booking>> bookingMovie(Booking booking, int userId, int screenId) 
 	{
         User exUser = userDao.findUser(userId);
-        if (exUser != null) {
-            Movie exMovie = movieDao.findMovie(movieId);
-            if (exMovie != null) {
-                booking.setBookingMovieName(exMovie.getMovieName());
-                Ticket bookingTicket = new Ticket();
-                bookingTicket.setTicketCount(booking.getTicketCount());
-                List<Screen> listOfScreens = screenDao.findAllScreen();
-                Screen exScreen = null;
-                for (Screen screen : listOfScreens) 
-                {
-                    if (screen.getMovieName().getMovieId() == movieId) 
-                    {
-                        exScreen = screen;
-                        break;
-                    }
-                }
-                if (exScreen != null) 
-                {
-                    booking.setShowDate(exScreen.getShowDate());
-                    booking.setShowTime(exScreen.getShowTime());
-                    double totalAmount = 0;
-                    List<Seat> listOfSeats = new ArrayList<>();
-                    if (booking.getSeatType().equals(SeatType.FirstClass)) 
-                    {
-                        int[] firstClass = exScreen.getSeatAclass();
-                        for (int i=0; i<booking.getTicketCount(); i++) 
-                        {
-                            int availableSeatIndex = -1;
-                            for (int j=0; j<firstClass.length; j++) 
-                            {
-                                if (firstClass[j] == 0) {
-                                    availableSeatIndex = j;
-                                    break;
-                                }
-                            }
-                            if (availableSeatIndex != -1) 
-                            {
-                                firstClass[availableSeatIndex] = 1;
-                                totalAmount += 500;
-                                Seat s = new Seat();
-                                s.setSeatNumber("A00" + availableSeatIndex);
-                                s.setSeatType(SeatType.FirstClass);
-                                seatDao.saveSeat(s);
-                                listOfSeats.add(s);
-                            } 
-                            else 
-                            {
-                                return null;//seat not available
-                            }
-                        }
-                        exScreen.setSeatAclass(firstClass);
-                        screenDao.updateScreen(exScreen, exScreen.getScreenId());
-                    }
-                    bookingTicket.setSeats(listOfSeats);
-                    bookingTicket.setBooking(booking);
-                    booking.setTicket(bookingTicket);
-                    booking.setTotalAmount(totalAmount);
-                    Ticket savedTicket = ticketDao.saveTicket(bookingTicket);
-                    if (savedTicket != null) 
-                    {
-                        List<Booking> bookingHistory = exUser.getBookingHistory();
-                        bookingHistory.add(booking);
-                        exUser.setBookingHistory(bookingHistory);
-                        userDao.updateUser(exUser, userId);
-                        ResponseStructure<Booking> structure = new ResponseStructure<>();
-                        structure.setMessage("Ticket Booked Successfully /n Your Ticket Id Is" + savedTicket.getTicketId());
-                        structure.setStatus(HttpStatus.CREATED.value());
-                        structure.setData(booking);
-                        return new ResponseEntity<>(structure, HttpStatus.CREATED);
-                    }
-                    return null; // ticket not saved
-                }
-                return null; // movie not in screen list
-            }
-            return null; // movie not found
+        if (exUser != null) 
+        {
+        	Screen exScreen = screenDao.findScreen(screenId);
+        	if(exScreen != null)
+        	{
+        		Movie exMovie = exScreen.getMovieName();
+        		booking.setBookingMovieName(exMovie.getMovieName());
+        		
+        		Ticket bookingTicket = new Ticket();
+        		bookingTicket.setTicketCount(booking.getTicketCount());
+        		
+        		booking.setShowDate(exScreen.getShowDate());
+        		booking.setShowTime(exScreen.getShowTime());
+        		booking.setBookingMovieSchedule(exScreen.getScreenMovieShedule());
+        		
+        		double totalAmount = 0;
+        		List<Seat> listOfSeats = new ArrayList<>();
+        		int[] bookingSeatIndexes = booking.getBookingSeatIndexes();
+        		
+        		if(booking.getSeatType().equals(SeatType.FirstClass))
+        		{
+        			int[] firstClass = exScreen.getSeatAclass();
+        			for(int i=0;i<bookingSeatIndexes.length;i++)
+        			{
+        				firstClass[bookingSeatIndexes[i]] = 1;
+        				totalAmount = totalAmount + 500;
+        				Seat s = new Seat();
+        				s.setSeatNumber("A00"+bookingSeatIndexes[i]);
+        				s.setSeatType(SeatType.FirstClass);
+        				seatDao.saveSeat(s);
+        				listOfSeats.add(s);
+        			}
+        			exScreen.setSeatAclass(firstClass);
+        			screenDao.updateScreen(exScreen, exScreen.getScreenId());
+        		}
+        		else if(booking.getSeatType().equals(SeatType.SecondClass))
+        		{
+        			int[] secondClass = exScreen.getSeatBclass();
+        			for(int i=0;i<bookingSeatIndexes.length;i++)
+        			{
+        				secondClass[bookingSeatIndexes[i]] = 1;
+        				totalAmount = totalAmount + 300;
+        				Seat s = new Seat();
+        				s.setSeatNumber("B00"+bookingSeatIndexes[i]);
+        				s.setSeatType(SeatType.SecondClass);
+        				seatDao.saveSeat(s);
+        				listOfSeats.add(s);
+        			}
+        			exScreen.setSeatBclass(secondClass);
+        			screenDao.updateScreen(exScreen, exScreen.getScreenId());
+        		}
+        		else if(booking.getSeatType().equals(SeatType.ThirdClass))
+        		{
+        			int[] thirdClass = exScreen.getSeatCclass();
+        			for(int i=0;i<bookingSeatIndexes.length;i++)
+        			{
+        				thirdClass[bookingSeatIndexes[i]] = 1;
+        				totalAmount = totalAmount + 150;
+        				Seat s = new Seat();
+        				s.setSeatNumber("C00"+bookingSeatIndexes[i]);
+        				s.setSeatType(SeatType.ThirdClass);
+        				seatDao.saveSeat(s);
+        				listOfSeats.add(s);
+        			}
+        			exScreen.setSeatCclass(thirdClass);
+        			screenDao.updateScreen(exScreen, exScreen.getScreenId());
+        		}
+        		
+        		bookingTicket.setSeats(listOfSeats);
+        		bookingTicket.setBooking(booking);
+        		booking.setTicket(bookingTicket);
+        		booking.setTotalAmount(totalAmount);
+        		
+        		Ticket savedTicket = ticketDao.saveTicket(bookingTicket);
+        		
+        		if(savedTicket != null)
+        		{
+        			List<Booking> bookingHistory = exUser.getBookingHistory();
+                    bookingHistory.add(booking);
+                    exUser.setBookingHistory(bookingHistory);
+                    userDao.updateUser(exUser, userId);
+                    ResponseStructure<Booking> structure = new ResponseStructure<>();
+                    structure.setMessage("Ticket Booked Successfully  Your Ticket Id Is" + savedTicket.getTicketId());
+                    structure.setStatus(HttpStatus.CREATED.value());
+                    structure.setData(booking);
+                    return new ResponseEntity<>(structure, HttpStatus.CREATED);
+        		}
+        		return null;//ticket not saved
+        	}
+        	return null;//screen not found
         }
         return null; // user not found
     }
