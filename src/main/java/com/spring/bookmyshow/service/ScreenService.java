@@ -1,12 +1,19 @@
 package com.spring.bookmyshow.service;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import com.spring.bookmyshow.dao.MovieDao;
 import com.spring.bookmyshow.dao.ScreenDao;
+import com.spring.bookmyshow.dao.TheatreDao;
+import com.spring.bookmyshow.entity.Movie;
 import com.spring.bookmyshow.entity.Screen;
+import com.spring.bookmyshow.entity.Theatre;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -14,19 +21,44 @@ public class ScreenService
 {
 	@Autowired
 	ScreenDao screenDao;
+	@Autowired
+	MovieDao movieDao;
+	@Autowired
+	TheatreDao theatreDao;
 	
-	public ResponseEntity<ResponseStructure<Screen>> saveScreen(Screen screen)
+	public ResponseEntity<ResponseStructure<Screen>> saveScreen(Screen screen,int movieId,int theatreId)
 	{
-		Screen screenNew = screenDao.saveScreen(screen);
-		if(screen != null)
+		Theatre theatre = theatreDao.findTheatre(theatreId);
+		if(theatre != null)
 		{
-			ResponseStructure<Screen> structure = new ResponseStructure<>();
-			structure.setMessage("Screen Created");
-			structure.setStatus(HttpStatus.CREATED.value());
-			structure.setData(screenNew);
-			return new ResponseEntity<ResponseStructure<Screen>>(structure,HttpStatus.CREATED);
+			Movie movie = movieDao.findMovie(movieId);
+			if(movie != null)
+			{
+				screen.setMovieName(movie);
+				screen.setTheatre(theatre);
+				int totalSeatCount = screen.getTotalSeatingCount();
+				screen.setSeatAclass(new int[(15 * totalSeatCount)/100]);
+				screen.setSeatBclass(new int[(30 * totalSeatCount)/100]);
+				screen.setSeatCclass(new int[(55 * totalSeatCount)/100]);
+				Screen screenNew = screenDao.saveScreen(screen);
+				if(screenNew != null)
+				{
+					List<Screen> theatreScreenList = theatre.getTheatreScreenList();
+					theatreScreenList.add(screenNew);
+					theatre.setTheatreScreenList(theatreScreenList);
+					theatreDao.updateTheatre(theatre, theatreId);
+					ResponseStructure<Screen> structure = new ResponseStructure<>();
+					structure.setMessage("Screen Created And Assigned To Theatre Id : "+theatreId);
+					structure.setStatus(HttpStatus.CREATED.value());
+					structure.setData(screenNew);
+					return new ResponseEntity<ResponseStructure<Screen>>(structure,HttpStatus.CREATED);
+				}
+				return null;
+			}
+			return null;
 		}
 		return null;
+		
 	}
 	
 	public ResponseEntity<ResponseStructure<Screen>> findScreen(int screenId)

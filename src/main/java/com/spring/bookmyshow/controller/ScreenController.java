@@ -22,9 +22,9 @@ public class ScreenController
 	ScreenService screenService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Screen>> saveScreen(@RequestBody Screen screen)
+	public ResponseEntity<ResponseStructure<Screen>> saveScreen(@RequestBody Screen screen,@RequestParam int movieId,@RequestParam int theatreId)
 	{
-		return screenService.saveScreen(screen);
+		return screenService.saveScreen(screen, movieId, theatreId);
 	}
 	
 	@GetMapping
