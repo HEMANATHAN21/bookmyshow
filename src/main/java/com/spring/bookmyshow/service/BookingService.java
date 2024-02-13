@@ -117,7 +117,8 @@ public class BookingService
                 Screen exScreen = null;
                 for (Screen screen : listOfScreens) 
                 {
-                    if (screen.getMovieName().getMovieId() == movieId) {
+                    if (screen.getMovieName().getMovieId() == movieId) 
+                    {
                         exScreen = screen;
                         break;
                     }
