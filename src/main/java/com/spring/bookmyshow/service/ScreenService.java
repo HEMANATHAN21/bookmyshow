@@ -1,6 +1,7 @@
 package com.spring.bookmyshow.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,5 +136,27 @@ public class ScreenService
 			return null;//screen seat not updated
 		}
 		return null;//screen not found
+	}
+	
+	public ResponseEntity<ResponseStructure<List<Screen>>> findListOfScreenBasedOnMovieName(String movieName)
+	{
+		List<Screen> allScreen = screenDao.findAllScreen();
+		List<Screen> MovieAvailableScreenList = new ArrayList<>();
+		for (Screen screen : allScreen) 
+		{
+			if(screen.getMovieName().getMovieName().equals(movieName))
+			{
+				MovieAvailableScreenList.add(screen);
+			}
+		}
+		if(!MovieAvailableScreenList.isEmpty())
+		{
+			ResponseStructure<List<Screen>> structure = new ResponseStructure<>();
+			structure.setMessage("Movie Available Screen List Retrived");
+			structure.setStatus(HttpStatus.FOUND.value());
+			structure.setData(MovieAvailableScreenList);
+			return new ResponseEntity<ResponseStructure<List<Screen>>>(structure,HttpStatus.FOUND);
+		}
+		return null;
 	}
 }

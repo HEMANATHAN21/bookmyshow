@@ -1,5 +1,7 @@
 package com.spring.bookmyshow.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,5 +51,11 @@ public class ScreenController
 	public ResponseEntity<ResponseStructure<Screen>> updateSeatClass(@RequestParam int screenId)
 	{
 		return screenService.updateSeatClass(screenId);
+	}
+	
+	@GetMapping("listofscreenmoviename")
+	public ResponseEntity<ResponseStructure<List<Screen>>> findListOfScreenBasedOnMovieName(@RequestParam String movieName)
+	{
+		return screenService.findListOfScreenBasedOnMovieName(movieName);
 	}
 }
