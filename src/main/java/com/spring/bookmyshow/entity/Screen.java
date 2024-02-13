@@ -38,5 +38,6 @@ public class Screen
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Theatre theatre;
+	private int screenTheatreId;
 	private Status showStatus;
 }

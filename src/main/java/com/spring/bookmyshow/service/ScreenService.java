@@ -40,6 +40,7 @@ public class ScreenService
 				screen.setSeatAclass(new int[(15 * totalSeatCount)/100]);
 				screen.setSeatBclass(new int[(30 * totalSeatCount)/100]);
 				screen.setSeatCclass(new int[(55 * totalSeatCount)/100]);
+				screen.setScreenTheatreId(theatre.getTheatreId());
 				Screen screenNew = screenDao.saveScreen(screen);
 				if(screenNew != null)
 				{
