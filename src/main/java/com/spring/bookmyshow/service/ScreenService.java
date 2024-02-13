@@ -14,6 +14,7 @@ import com.spring.bookmyshow.dao.ScreenDao;
 import com.spring.bookmyshow.dao.TheatreDao;
 import com.spring.bookmyshow.entity.Movie;
 import com.spring.bookmyshow.entity.Screen;
+import com.spring.bookmyshow.entity.SeatType;
 import com.spring.bookmyshow.entity.Theatre;
 import com.spring.bookmyshow.util.ResponseStructure;
 
@@ -156,6 +157,44 @@ public class ScreenService
 			structure.setStatus(HttpStatus.FOUND.value());
 			structure.setData(MovieAvailableScreenList);
 			return new ResponseEntity<ResponseStructure<List<Screen>>>(structure,HttpStatus.FOUND);
+		}
+		return null;
+	}
+	
+	public ResponseEntity<ResponseStructure<List<Integer>>> checkAvailableSeats(int screenId,SeatType seatType)
+	{
+		Screen exScreen = screenDao.findScreen(screenId);
+		List<Integer> avilableSeatsBasedOnIndexNo = new ArrayList<>();
+		if(exScreen != null)
+		{
+			int[] availabeScreen = null;
+			if(seatType.equals(SeatType.FirstClass))
+				availabeScreen = exScreen.getSeatAclass();
+			else if(seatType.equals(SeatType.SecondClass))
+				availabeScreen = exScreen.getSeatBclass();
+			else if(seatType.equals(SeatType.ThirdClass))
+				availabeScreen = exScreen.getSeatCclass();
+			
+			if(availabeScreen != null)
+			{
+				for(int i=0;i<availabeScreen.length;i++)
+				{
+					if(availabeScreen[i] == 0)
+					{
+						avilableSeatsBasedOnIndexNo.add(i);
+					}
+				}
+				if(!avilableSeatsBasedOnIndexNo.isEmpty())
+				{
+					ResponseStructure<List<Integer>> structure = new ResponseStructure<>();
+					structure.setMessage("Available Seat Indexes Retrived For "+seatType+" Seat Type");
+					structure.setData(avilableSeatsBasedOnIndexNo);
+					structure.setStatus(HttpStatus.OK.value());
+					return new ResponseEntity<ResponseStructure<List<Integer>>>(structure,HttpStatus.OK);
+				}
+				return null;//avilableSeatsBasedOnIndexNo is empty
+			}
+			return null;
 		}
 		return null;
 	}

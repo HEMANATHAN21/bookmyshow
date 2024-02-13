@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spring.bookmyshow.entity.Screen;
+import com.spring.bookmyshow.entity.SeatType;
 import com.spring.bookmyshow.service.ScreenService;
 import com.spring.bookmyshow.util.ResponseStructure;
 
@@ -57,5 +58,11 @@ public class ScreenController
 	public ResponseEntity<ResponseStructure<List<Screen>>> findListOfScreenBasedOnMovieName(@RequestParam String movieName)
 	{
 		return screenService.findListOfScreenBasedOnMovieName(movieName);
+	}
+	
+	@GetMapping("checkavailableseats")
+	public ResponseEntity<ResponseStructure<List<Integer>>> checkAvailableSeats(@RequestParam int screenId,@RequestParam SeatType seatType)
+	{
+		return screenService.checkAvailableSeats(screenId, seatType);
 	}
 }
