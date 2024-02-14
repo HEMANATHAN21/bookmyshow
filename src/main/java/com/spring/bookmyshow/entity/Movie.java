@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +27,7 @@ public class Movie
 //	@OneToMany(cascade = CascadeType.ALL)
 //	private List<Screen> movieScreenList;
 	@OneToMany(cascade = CascadeType.ALL)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private List<Review> moviewReviews;
-	private int rating;
+	private double rating;
 }

@@ -1,11 +1,18 @@
 package com.spring.bookmyshow.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import com.spring.bookmyshow.dao.MovieDao;
 import com.spring.bookmyshow.dao.ReviewDao;
+import com.spring.bookmyshow.dao.UserDao;
+import com.spring.bookmyshow.entity.Movie;
 import com.spring.bookmyshow.entity.Review;
+import com.spring.bookmyshow.entity.User;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -13,19 +20,48 @@ public class ReviewService
 {
 	@Autowired
 	ReviewDao reviewDao;
+	@Autowired
+	UserDao userDao;
+	@Autowired
+	MovieDao movieDao;
 	
-	public ResponseEntity<ResponseStructure<Review>> saveReview(Review review)
+	public ResponseEntity<ResponseStructure<Review>> saveReview(Review review,int userId,int movieId)
 	{
-		Review reviewNew = reviewDao.saveReview(review);
-		if(reviewNew != null)
+		User exUser = userDao.findUser(userId);
+		if(exUser != null)
 		{
-			ResponseStructure<Review> structure = new ResponseStructure<>();
-			structure.setMessage("Review Created");
-			structure.setStatus(HttpStatus.CREATED.value());
-			structure.setData(reviewNew);
-			return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.CREATED);
+			Movie exMovie = movieDao.findMovie(movieId);
+			if(exMovie != null)
+			{
+				review.setMovie(exMovie);
+				review.setUserId(exUser.getUserId());
+				Review reviewNew = reviewDao.saveReview(review);
+				List<Review> reviewList = exMovie.getMoviewReviews();
+				reviewList.add(reviewNew);
+				exMovie.setMoviewReviews(reviewList);
+				double total = 0;
+				int count = 0;
+				for (Review rev : reviewList) 
+				{
+					total = total + rev.getRating();
+					count++;
+				}
+				exMovie.setRating(total / count);
+				movieDao.updateMovie(exMovie, exMovie.getMovieId());
+				if(reviewNew != null)
+				{
+					ResponseStructure<Review> structure = new ResponseStructure<>();
+					structure.setMessage("Review Created");
+					structure.setStatus(HttpStatus.CREATED.value());
+					structure.setData(reviewNew);
+					return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.CREATED);
+				}
+				return null;
+			}
+			return null;
 		}
 		return null;
+		
 	}
 	
 	public ResponseEntity<ResponseStructure<Review>> findReview(int reviewId)

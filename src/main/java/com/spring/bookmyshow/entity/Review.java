@@ -2,6 +2,7 @@ package com.spring.bookmyshow.entity;
 
 import org.springframework.stereotype.Component;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +23,6 @@ public class Review
 	private String review;
 	private double rating;
 	private int userId;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.MERGE)
     private Movie movie;
 }
