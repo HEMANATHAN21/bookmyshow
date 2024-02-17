@@ -25,9 +25,9 @@ public class ReviewService
 	@Autowired
 	MovieDao movieDao;
 	
-	public ResponseEntity<ResponseStructure<Review>> saveReview(Review review,int userId,int movieId)
+	public ResponseEntity<ResponseStructure<Review>> saveReview(Review review,int movieId,String userEmail,String userPassword)
 	{
-		User exUser = userDao.findUser(userId);
+		User exUser = userDao.findByEmail(userEmail, userPassword);
 		if(exUser != null)
 		{
 			Movie exMovie = movieDao.findMovie(movieId);
@@ -64,52 +64,68 @@ public class ReviewService
 		
 	}
 	
-	public ResponseEntity<ResponseStructure<Review>> findReview(int reviewId)
+	public ResponseEntity<ResponseStructure<Review>> findReview(int reviewId,String userEmail,String userPassword)
 	{
-		Review review = reviewDao.findReview(reviewId);
-		if(review != null)
+		User exUser = userDao.findByEmail(userEmail, userPassword);
+		if(exUser != null)
 		{
-			ResponseStructure<Review> structure = new ResponseStructure<>();
-			structure.setMessage("Review Founded");
-			structure.setStatus(HttpStatus.FOUND.value());
-			structure.setData(review);
-			return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.FOUND);
-		}
-		return null;
-	}
-	
-	public ResponseEntity<ResponseStructure<Review>> deleteReview(int reviewId)
-	{
-		Review review = reviewDao.findReview(reviewId);
-		if(review != null)
-		{
-			Review deletedReview = reviewDao.findReview(reviewId);
-			if(deletedReview != null)
+			Review review = reviewDao.findReview(reviewId);
+			if(review != null)
 			{
 				ResponseStructure<Review> structure = new ResponseStructure<>();
-				structure.setMessage("Review Deleted");
-				structure.setStatus(HttpStatus.OK.value());
-				structure.setData(deletedReview);
-				return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.OK);
+				structure.setMessage("Review Founded");
+				structure.setStatus(HttpStatus.FOUND.value());
+				structure.setData(review);
+				return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.FOUND);
+			}
+			return null;
+		}
+		return null;
+		
+	}
+	
+	public ResponseEntity<ResponseStructure<Review>> deleteReview(int reviewId,String userEmail,String userPassword)
+	{
+		User exUser = userDao.findByEmail(userEmail, userPassword);
+		if(exUser != null)
+		{
+			Review review = reviewDao.findReview(reviewId);
+			if(review != null)
+			{
+				Review deletedReview = reviewDao.findReview(reviewId);
+				if(deletedReview != null)
+				{
+					ResponseStructure<Review> structure = new ResponseStructure<>();
+					structure.setMessage("Review Deleted");
+					structure.setStatus(HttpStatus.OK.value());
+					structure.setData(deletedReview);
+					return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.OK);
+				}
+				return null;
 			}
 			return null;
 		}
 		return null;
 	}
 	
-	public ResponseEntity<ResponseStructure<Review>> updateReview(Review review, int reviewId)
+	public ResponseEntity<ResponseStructure<Review>> updateReview(Review review, int reviewId,String userEmail,String userPassword)
 	{
-		Review reviewfind = reviewDao.findReview(reviewId);
-		if(reviewfind != null)
+		User exUser = userDao.findByEmail(userEmail, userPassword);
+		if(exUser != null)
 		{
-			Review updateReview = reviewDao.updateReview(review,reviewId);
-			if(updateReview != null)
+			Review reviewfind = reviewDao.findReview(reviewId);
+			if(reviewfind != null)
 			{
-				ResponseStructure<Review> structure = new ResponseStructure<>();
-				structure.setMessage("Review Updated");
-				structure.setStatus(HttpStatus.OK.value());
-				structure.setData(updateReview);
-				return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.OK);
+				Review updateReview = reviewDao.updateReview(review,reviewId);
+				if(updateReview != null)
+				{
+					ResponseStructure<Review> structure = new ResponseStructure<>();
+					structure.setMessage("Review Updated");
+					structure.setStatus(HttpStatus.OK.value());
+					structure.setData(updateReview);
+					return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.OK);
+				}
+				return null;
 			}
 			return null;
 		}

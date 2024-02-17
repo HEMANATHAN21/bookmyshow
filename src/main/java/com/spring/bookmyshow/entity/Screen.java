@@ -1,7 +1,6 @@
 package com.spring.bookmyshow.entity;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -13,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 @Setter
@@ -24,18 +24,12 @@ public class Screen
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int screenId;
-	private LocalDate showDate;
-	private LocalTime showTime;
-	private MovieSchedule screenMovieShedule;
 	private int totalSeatingCount;
-	private int[] seatAclass;
-	private int[] seatBclass;
-	private int[] seatCclass;
-	@ManyToOne(cascade = CascadeType.MERGE)
-	private Movie movieName;
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Theatre theatre;
-	private int screenTheatreId;
-	private Status showStatus;
+	private int theatreId;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<ScreenShow> showList;
+	
 }

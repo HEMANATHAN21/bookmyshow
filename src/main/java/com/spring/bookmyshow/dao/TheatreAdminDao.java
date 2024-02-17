@@ -50,4 +50,9 @@ public class TheatreAdminDao
 	{
 		return theatreAdminRepo.findAll();
 	}
+	
+	public TheatreAdmin findByEmail(String theatreAdminEmail, String theatreAdminPassword)
+	{
+		return theatreAdminRepo.findByEmail(theatreAdminEmail, theatreAdminPassword);
+	}
 }

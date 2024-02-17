@@ -46,4 +46,10 @@ public class UserController
 	{
 		return userService.updateUser(user,userId);
 	}
+	
+	@GetMapping("findbyemail")
+	public User findByEmail(@RequestParam String userEmail,@RequestParam String userPassword)
+	{
+		return userService.findByEmail(userEmail, userPassword);
+	}
 }

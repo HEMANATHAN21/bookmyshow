@@ -1,7 +1,5 @@
 package com.spring.bookmyshow.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spring.bookmyshow.entity.Screen;
-import com.spring.bookmyshow.entity.SeatType;
 import com.spring.bookmyshow.service.ScreenService;
 import com.spring.bookmyshow.util.ResponseStructure;
 
@@ -25,9 +22,9 @@ public class ScreenController
 	ScreenService screenService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Screen>> saveScreen(@RequestBody Screen screen,@RequestParam int movieId,@RequestParam int theatreId)
+	public ResponseEntity<ResponseStructure<Screen>> saveScreen(@RequestBody Screen screen,@RequestParam String theatreAdminEmail,@RequestParam String theatreAdminPassword)
 	{
-		return screenService.saveScreen(screen, movieId, theatreId);
+		return screenService.saveScreen(screen, theatreAdminEmail, theatreAdminPassword);
 	}
 	
 	@GetMapping
@@ -48,21 +45,5 @@ public class ScreenController
 		return screenService.updateScreen(screen,screenId);
 	}
 	
-	@PutMapping("updateseatclass")
-	public ResponseEntity<ResponseStructure<Screen>> updateSeatClass(@RequestParam int screenId)
-	{
-		return screenService.updateSeatClass(screenId);
-	}
-	
-	@GetMapping("listofscreenmoviename")
-	public ResponseEntity<ResponseStructure<List<Screen>>> findListOfScreenBasedOnMovieName(@RequestParam String movieName)
-	{
-		return screenService.findListOfScreenBasedOnMovieName(movieName);
-	}
-	
-	@GetMapping("checkavailableseats")
-	public ResponseEntity<ResponseStructure<List<Integer>>> checkAvailableSeats(@RequestParam int screenId,@RequestParam SeatType seatType)
-	{
-		return screenService.checkAvailableSeats(screenId, seatType);
-	}
+
 }

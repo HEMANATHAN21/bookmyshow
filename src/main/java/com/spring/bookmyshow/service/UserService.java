@@ -1,5 +1,7 @@
 package com.spring.bookmyshow.service;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -92,5 +94,31 @@ public class UserService
 			return null;
 		}
 		return null;
+	}
+	
+	public User userLogin(String userEmail,String userPassword)
+	{
+		List<User> userList = userDao.findAllUser();
+		if(!userList.isEmpty())
+		{
+			for (User user : userList) 
+			{
+				if(user.getUserEmail().equals(userEmail))
+				{
+					if(user.getUserPassword().equals(userPassword))
+					{
+						return user;
+					}
+					return null;//password wrong 
+				}
+				return null;//email wrong
+			}
+		}
+		return null;//list is empty
+	}
+	
+	public User findByEmail(String userEmail, String userPassword)
+	{
+		return userDao.findByEmail(userEmail, userPassword);
 	}
 }

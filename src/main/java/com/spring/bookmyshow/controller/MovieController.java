@@ -21,27 +21,27 @@ public class MovieController
 	MovieService movieService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Movie>> saveMovie(@RequestBody Movie movie)
+	public ResponseEntity<ResponseStructure<Movie>> saveMovie(@RequestBody Movie movie,@RequestParam String theatreAdminEmail,@RequestParam String theatreAdminPassword)
 	{
-		return movieService.saveMovie(movie);
+		return movieService.saveMovie(movie, theatreAdminEmail, theatreAdminPassword);
 	}
 	
 	@GetMapping
-	public ResponseEntity<ResponseStructure<Movie>> findMovie(@RequestParam int movieId)
+	public ResponseEntity<ResponseStructure<Movie>> findMovie(@RequestParam int movieId,@RequestParam String theatreAdminEmail,@RequestParam String theatreAdminPassword)
 	{
-		return movieService.findMovie(movieId);
+		return movieService.findMovie(movieId, theatreAdminEmail, theatreAdminPassword);
 	}
 	
 	@DeleteMapping
-	public ResponseEntity<ResponseStructure<Movie>> deleteMovie(@RequestParam int movieId)
+	public ResponseEntity<ResponseStructure<Movie>> deleteMovie(@RequestParam int movieId,@RequestParam String theatreAdminEmail,@RequestParam String theatreAdminPassword)
 	{
-		return movieService.deleteMovie(movieId);
+		return movieService.deleteMovie(movieId, theatreAdminEmail, theatreAdminPassword);
 	}
 	
 	@PutMapping
-	public ResponseEntity<ResponseStructure<Movie>> updateMovie(@RequestBody Movie movie,@RequestParam int movieId)
+	public ResponseEntity<ResponseStructure<Movie>> updateMovie(@RequestBody Movie movie,@RequestParam int movieId,@RequestParam String theatreAdminEmail,@RequestParam String theatreAdminPassword)
 	{
-		return movieService.updateMovie(movie,movieId);
+		return movieService.updateMovie(movie, movieId, theatreAdminEmail, theatreAdminPassword);		
 	}
 
 }

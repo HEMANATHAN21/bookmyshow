@@ -44,4 +44,10 @@ public class TicketController
 	{
 		return ticketService.updateTicket(ticket,ticketId);
 	}
+	
+	@DeleteMapping("cancelticket")
+	public ResponseEntity<ResponseStructure<Ticket>> cancelTicket(@RequestParam String userEmail,@RequestParam String userPassword,@RequestParam int ticketId)
+	{
+		return ticketService.cancelTicket(userEmail, userPassword, ticketId);
+	}
 }

@@ -1,5 +1,7 @@
 package com.spring.bookmyshow.service;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -98,5 +100,24 @@ public class TheatreAdminService
 		return null;
 	}
 	
+	public TheatreAdmin theatreAdminLogin(String theatreAdminEmail, String theatreAdminPassword)
+	{
+		List<TheatreAdmin> theatreAdminList = theatreAdminDao.findAllTheatreAdmin();
+		if(!theatreAdminList.isEmpty())
+		{
+			for (TheatreAdmin theatreAdmin : theatreAdminList) 
+			{
+				if(theatreAdmin.getTheatreAdminEmail().equals(theatreAdminEmail))
+				{
+					if(theatreAdmin.getTheatreAdminPassword().equals(theatreAdminPassword))
+					{
+						return theatreAdmin;
+					}
+				}
+				return null;//
+			}
+		}
+		return null;//list empty
+	}
 	
 }

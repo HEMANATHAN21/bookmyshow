@@ -46,14 +46,14 @@ public class TheatreController
 	}
 	
 	@PutMapping("assigntheatre")
-	public ResponseEntity<ResponseStructure<Theatre>> assignTheatreAdminToTheatre(@RequestParam int theatreId,@RequestParam int theatreAdminId)
+	public ResponseEntity<ResponseStructure<Theatre>> assignTheatreAdminToTheatre(@RequestParam String theatreAdminEmail,@RequestParam String theatreAdminPassword )
 	{
-		return theatreService.assignTheatreAdminToTheatre(theatreId,theatreAdminId);
+		return theatreService.assignTheatreAdminToTheatre(theatreAdminEmail, theatreAdminPassword);
 	}
 	
 	@PutMapping("addscreen")
-	public ResponseEntity<ResponseStructure<Theatre>> addScreenInTheatre(@RequestParam int theatreId,@RequestParam int screenId)
+	public ResponseEntity<ResponseStructure<Theatre>> addScreenInTheatre(@RequestParam int screenId,@RequestParam String theatreAdminEmail,@RequestParam String theatreAdminPassword)
 	{
-		return theatreService.addScreenInTheatre(theatreId,screenId);
+		return theatreService.addScreenInTheatre(screenId, theatreAdminEmail, theatreAdminPassword);
 	}
 }

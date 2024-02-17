@@ -22,27 +22,27 @@ public class ReviewController
 	ReviewService reviewService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Review>> saveReview(@RequestBody Review review,@RequestParam int userId,@RequestParam int movieId)
+	public ResponseEntity<ResponseStructure<Review>> saveReview(@RequestBody Review review,@RequestParam int userId,@RequestParam int movieId,@RequestParam String userEmail,@RequestParam String userPassword)
 	{
-		return reviewService.saveReview(review,userId,movieId);
+		return reviewService.saveReview(review, movieId, userEmail, userPassword);
 	}
 	
 	@GetMapping
-	public ResponseEntity<ResponseStructure<Review>> findReview(@RequestParam int reviewId)
+	public ResponseEntity<ResponseStructure<Review>> findReview(@RequestParam int reviewId,@RequestParam String userEmail,@RequestParam String userPassword)
 	{
-		return reviewService.findReview(reviewId);
+		return reviewService.findReview(reviewId, userEmail, userPassword);
 	}
 	
 	@DeleteMapping
-	public ResponseEntity<ResponseStructure<Review>> deleteReview(@RequestParam int reviewId)
+	public ResponseEntity<ResponseStructure<Review>> deleteReview(@RequestParam int reviewId,@RequestParam String userEmail,@RequestParam String userPassword)
 	{
-		return reviewService.deleteReview(reviewId);
+		return reviewService.deleteReview(reviewId, userEmail, userPassword);
 	}
 	
 	@PutMapping
-	public ResponseEntity<ResponseStructure<Review>> updateReview(@RequestBody Review review,@RequestParam int reviewId)
+	public ResponseEntity<ResponseStructure<Review>> updateReview(@RequestBody Review review,@RequestParam int reviewId,@RequestParam String userEmail,@RequestParam String userPassword)
 	{
-		return reviewService.updateReview(review,reviewId);
+		return reviewService.updateReview(review, reviewId, userEmail, userPassword);
 	}
 
 }

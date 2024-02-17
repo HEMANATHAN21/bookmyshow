@@ -27,6 +27,7 @@ public class TheatreService
 	@Autowired
 	ScreenDao screenDao;
 	
+	
 	public ResponseEntity<ResponseStructure<Theatre>> saveTheatre(Theatre theatre)
 	{
 		Theatre theatreNew = theatreDao.saveTheatre(theatre);
@@ -93,51 +94,63 @@ public class TheatreService
 		return null;
 	}
 	
-	public ResponseEntity<ResponseStructure<Theatre>> assignTheatreAdminToTheatre(int theatreId,int theatreAdminId)
+	public ResponseEntity<ResponseStructure<Theatre>> assignTheatreAdminToTheatre(String theatreAdminEmail,String theatreAdminPassword)
 	{
-		Theatre exTheatre = theatreDao.findTheatre(theatreId);
-		if(exTheatre != null)
+		TheatreAdmin exTheatreAdmin = theatreAdminDao.findByEmail(theatreAdminEmail, theatreAdminPassword);
+		if(exTheatreAdmin != null)
 		{
-			TheatreAdmin exTheatreAdmin = theatreAdminDao.findTheatreAdmin(theatreAdminId);
-			if(exTheatreAdmin != null)
+			int theatreId = exTheatreAdmin.getAdminTheatre().getTheatreId();
+			Theatre exTheatre = theatreDao.findTheatre(theatreId);
+			if(exTheatre != null)
 			{
-				exTheatre.setTheatreAdmin(exTheatreAdmin);
+				//TheatreAdmin exTheatreAdmin = theatreAdminDao.findTheatreAdmin(exTheatreAdmin1.getTheatreAdminId());
+				if(exTheatreAdmin != null)
+				{
+					exTheatre.setTheatreAdmin(exTheatreAdmin);
+					Theatre updatedTheatre = theatreDao.updateTheatre(exTheatre, theatreId);
+					if(updatedTheatre != null)
+					{
+						ResponseStructure<Theatre> structure = new ResponseStructure<>();
+						structure.setMessage("TheatreAdmin Successfully Assigned To Theatre");
+						structure.setStatus(HttpStatus.OK.value());
+						structure.setData(updatedTheatre);
+						return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
+					}
+					return null; //theatre  not updated
+				}
+				return null; //theatre admin not found
+			}
+			return null; //theatre  not found
+		}
+		return null;
+	}
+	
+	public ResponseEntity<ResponseStructure<Theatre>> addScreenInTheatre(int screenId,String theatreAdminEmail,String theatreAdminPassword)
+	{
+		TheatreAdmin exTheatreAdmin = theatreAdminDao.findByEmail(theatreAdminEmail, theatreAdminPassword);
+		if(exTheatreAdmin != null)
+		{
+			int theatreId = exTheatreAdmin.getAdminTheatre().getTheatreId();
+			Theatre exTheatre = theatreDao.findTheatre(theatreId);
+			if(exTheatre != null)
+			{
+				List<Screen> theatreScreenList = exTheatre.getTheatreScreenList();
+				Screen screen = screenDao.findScreen(screenId);
+				theatreScreenList.add(screen);
+				exTheatre.setTheatreScreenList(theatreScreenList);
 				Theatre updatedTheatre = theatreDao.updateTheatre(exTheatre, theatreId);
 				if(updatedTheatre != null)
 				{
 					ResponseStructure<Theatre> structure = new ResponseStructure<>();
-					structure.setMessage("TheatreAdmin Successfully Assigned To Theatre");
+					structure.setMessage("Successfuly Screen Added In Theatre");
 					structure.setStatus(HttpStatus.OK.value());
 					structure.setData(updatedTheatre);
 					return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
 				}
-				return null; //theatre  not updated
+				return null;//theatre not updated
 			}
-			return null; //theatre admin not found
+			return null;//theatre not found
 		}
-		return null; //theatre  not found
-	}
-	
-	public ResponseEntity<ResponseStructure<Theatre>> addScreenInTheatre(int theatreId, int screenId)
-	{
-		Theatre exTheatre = theatreDao.findTheatre(theatreId);
-		if(exTheatre != null)
-		{
-			List<Screen> theatreScreenList = exTheatre.getTheatreScreenList();
-			Screen screen = screenDao.findScreen(screenId);
-			theatreScreenList.add(screen);
-			exTheatre.setTheatreScreenList(theatreScreenList);
-			Theatre updatedTheatre = theatreDao.updateTheatre(exTheatre, theatreId);
-			if(updatedTheatre != null)
-			{
-				ResponseStructure<Theatre> structure = new ResponseStructure<>();
-				structure.setMessage("Successfuly Screen Added In Theatre");
-				structure.setStatus(HttpStatus.OK.value());
-				structure.setData(updatedTheatre);
-				return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
-			}
-			return null;//theatre not updated
-		}
-		return null;//theatre not found
+		return null;
 	}
 }

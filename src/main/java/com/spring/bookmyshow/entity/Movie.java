@@ -24,8 +24,6 @@ public class Movie
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int movieId;
 	private String movieName;
-//	@OneToMany(cascade = CascadeType.ALL)
-//	private List<Screen> movieScreenList;
 	@OneToMany(cascade = CascadeType.ALL)
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private List<Review> moviewReviews;

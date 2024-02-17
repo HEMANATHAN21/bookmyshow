@@ -24,11 +24,13 @@ public class Booking
 	private int bookingId;
 	private LocalDate showDate;
 	private LocalTime showTime;
+	private int showId;
 	private int ticketCount;
 	private int[] bookingSeatIndexes;
 	private double totalAmount;
 	private SeatType seatType;
 	private MovieSchedule bookingMovieSchedule;
+	private Payment modeOfPayment;
 	private String bookingMovieName;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Ticket ticket;

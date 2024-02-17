@@ -1,5 +1,7 @@
 package com.spring.bookmyshow.service;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -93,5 +95,26 @@ public class AdminBookMyShowService
 			return null;
 		}
 		return null;
+	}
+	
+	public AdminBookMyShow adminBmsLogin(String adminBmsMail, String adminBmsPassword)
+	{
+		List<AdminBookMyShow> adminBmsList = adminBmsDao.findAllAdminBookMyShow();
+		if(!adminBmsList.isEmpty())
+		{
+			for (AdminBookMyShow adminBookMyShow : adminBmsList) 
+			{
+				if(adminBookMyShow.getAdminBmsMail().equals(adminBmsMail))
+				{
+					if(adminBookMyShow.getAdminBmsPassword().equals(adminBmsList))
+					{
+						return adminBookMyShow;
+					}
+					return null;//password wrong
+				}
+				return null;//email invalid or not found
+			}
+		}
+		return null;//list Empty
 	}
 }

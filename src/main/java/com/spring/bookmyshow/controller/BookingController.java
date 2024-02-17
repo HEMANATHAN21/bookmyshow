@@ -43,10 +43,10 @@ public class BookingController
 	{
 		return bookingService.updateBooking(booking,bookingId);
 	}
+	
 	@PostMapping("bookingmovie")
-	public ResponseEntity<ResponseStructure<Booking>> bookingMovie(@RequestBody Booking booking,@RequestParam int userId,@RequestParam int screenId)
+	public ResponseEntity<ResponseStructure<Booking>> bookingMovie(@RequestBody Booking booking,@RequestParam String userEmail,@RequestParam String userPassword,@RequestParam int screenShowhowId)
 	{
-		return bookingService.bookingMovie(booking, userId, screenId);
+		return bookingService.bookingMovie(booking, userEmail, userPassword, screenShowhowId);
 	}
-
 }
