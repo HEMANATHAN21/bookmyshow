@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
@@ -30,7 +31,8 @@ public class Ticket
 	private int screenId;
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Seat> seats;
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL)
 	private Booking booking;
 }

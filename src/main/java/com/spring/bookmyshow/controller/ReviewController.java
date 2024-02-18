@@ -22,7 +22,7 @@ public class ReviewController
 	ReviewService reviewService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Review>> saveReview(@RequestBody Review review,@RequestParam int userId,@RequestParam int movieId,@RequestParam String userEmail,@RequestParam String userPassword)
+	public ResponseEntity<ResponseStructure<Review>> saveReview(@RequestBody Review review,@RequestParam int movieId,@RequestParam String userEmail,@RequestParam String userPassword)
 	{
 		return reviewService.saveReview(review, movieId, userEmail, userPassword);
 	}

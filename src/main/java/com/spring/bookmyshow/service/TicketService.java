@@ -108,15 +108,16 @@ public class TicketService
 			Ticket exTicket = ticketDao.findTicket(ticketId);
 			if(exTicket != null)
 			{
-				Booking exBooking = exTicket.getBooking();
+				Booking exBooking = bookingDao.findBooking(exTicket.getBooking().getBookingId());
 				List<Seat> listOfSeats = exTicket.getSeats();
-				for (Seat seat : listOfSeats) 
+				List<Seat> storedSeatList = new ArrayList<>();
+				if(!listOfSeats.isEmpty())
 				{
-					seatDao.deleteSeat(seat.getSeatId());
+					for (Seat seat : listOfSeats) 
+					{
+						storedSeatList.add(seat);
+					}
 				}
-				exTicket.setSeats(null);
-				exTicket.setBooking(null);
-				ticketDao.updateTicket(exTicket, exTicket.getTicketId());
 				int showId = exBooking.getShowId();
 				int[] bookingSeatIndexes = exBooking.getBookingSeatIndexes();
 				int ticketCount = exBooking.getTicketCount();
@@ -128,27 +129,37 @@ public class TicketService
 				}
 				exScreenShow.setTotalSeat(totalSeat);
 				screenShowDao.updateScreenShow(exScreenShow, exScreenShow.getSId());
-				ticketDao.updateTicket(exTicket, ticketId);
+				
+				exTicket.setSeats(null);
+				exTicket.setBooking(null);
+				ticketDao.updateTicket(exTicket, exTicket.getTicketId());
+				for(Seat s : storedSeatList)
+				{
+//					System.out.println(s.getSeatId());
+					seatDao.deleteSeat(s.getSeatId());
+				}
+				
+				List<Booking> bookingHistory = exUser.getBookingHistory();
+				List<Booking> newBookingHistory = new ArrayList<>();
+				for(Booking b : bookingHistory)
+				{
+					if(b.getBookingId() != exBooking.getBookingId())
+					{
+						newBookingHistory.add(b);
+					}
+					else if(b.getBookingId() == exBooking.getBookingId())
+					{
+						b.setTicket(null);
+						bookingDao.updateBooking(b, b.getBookingId());
+					}
+				}
+				exUser.setBookingHistory(newBookingHistory);
+				userDao.updateUser(exUser, exUser.getUserId());
+				exBooking.setTicket(null);
+				bookingDao.deleteBooking(exBooking.getBookingId());
 				Ticket deletedTicket = ticketDao.deleteTicket(ticketId);
 				if(deletedTicket != null)
 				{
-					List<Booking> bookingHistory = exUser.getBookingHistory();
-					List<Booking> newBookingHistory = new ArrayList<>();
-					for(Booking b : bookingHistory)
-					{
-						if(b.getBookingId() != exBooking.getBookingId())
-						{
-							newBookingHistory.add(b);
-						}
-						else if(b.getBookingId() == exBooking.getBookingId())
-						{
-							b.setTicket(null);
-							bookingDao.updateBooking(b, b.getBookingId());
-							bookingDao.deleteBooking(b.getBookingId());
-						}
-					}
-					exUser.setBookingHistory(newBookingHistory);
-					userDao.updateUser(exUser, exUser.getUserId());
 					ResponseStructure<Ticket> structure = new ResponseStructure<>();
 					structure.setMessage("Ticket Deleted... Given Ticket Id "+deletedTicket.getTicketId());
 					structure.setStatus(HttpStatus.OK.value());
