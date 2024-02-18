@@ -13,6 +13,8 @@ import com.spring.bookmyshow.dao.TheatreDao;
 import com.spring.bookmyshow.entity.Screen;
 import com.spring.bookmyshow.entity.Theatre;
 import com.spring.bookmyshow.entity.TheatreAdmin;
+import com.spring.bookmyshow.exception.TheatreAdminNotFound;
+import com.spring.bookmyshow.exception.TheatreNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -39,7 +41,7 @@ public class TheatreService
 			structure.setData(theatreNew);
 			return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.CREATED);
 		}
-		return null;
+		return null;//not saved
 	}
 	
 	public ResponseEntity<ResponseStructure<Theatre>> findTheatre(int theatreId)
@@ -53,7 +55,7 @@ public class TheatreService
 			structure.setData(theatre);
 			return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.FOUND);
 		}
-		return null;
+		throw new TheatreNotFound("Theatre Not Found In Given Theatre Id : "+theatreId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Theatre>> deleteTheatre(int theatreId)
@@ -70,9 +72,9 @@ public class TheatreService
 				structure.setData(deletedTheatre);
 				return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not deleted
 		}
-		return null;
+		throw new TheatreNotFound("Theatre Not Found In Given Theatre Id : "+theatreId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Theatre>> updateTheatre(Theatre theatre, int theatreId)
@@ -89,9 +91,9 @@ public class TheatreService
 				structure.setData(updateTheatre);
 				return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not updated
 		}
-		return null;
+		throw new TheatreNotFound("Theatre Not Found In Given Theatre Id : "+theatreId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Theatre>> assignTheatreAdminToTheatre(String theatreAdminEmail,String theatreAdminPassword)
@@ -103,26 +105,21 @@ public class TheatreService
 			Theatre exTheatre = theatreDao.findTheatre(theatreId);
 			if(exTheatre != null)
 			{
-				//TheatreAdmin exTheatreAdmin = theatreAdminDao.findTheatreAdmin(exTheatreAdmin1.getTheatreAdminId());
-				if(exTheatreAdmin != null)
+				exTheatre.setTheatreAdmin(exTheatreAdmin);
+				Theatre updatedTheatre = theatreDao.updateTheatre(exTheatre, theatreId);
+				if(updatedTheatre != null)
 				{
-					exTheatre.setTheatreAdmin(exTheatreAdmin);
-					Theatre updatedTheatre = theatreDao.updateTheatre(exTheatre, theatreId);
-					if(updatedTheatre != null)
-					{
-						ResponseStructure<Theatre> structure = new ResponseStructure<>();
-						structure.setMessage("TheatreAdmin Successfully Assigned To Theatre");
-						structure.setStatus(HttpStatus.OK.value());
-						structure.setData(updatedTheatre);
-						return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
-					}
-					return null; //theatre  not updated
+					ResponseStructure<Theatre> structure = new ResponseStructure<>();
+					structure.setMessage("TheatreAdmin Successfully Assigned To Theatre");
+					structure.setStatus(HttpStatus.OK.value());
+					structure.setData(updatedTheatre);
+					return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
 				}
-				return null; //theatre admin not found
+				return null; //theatre  not updated
 			}
-			return null; //theatre  not found
+			throw new TheatreNotFound("Theatre Not Found In Given Theatre Id : "+theatreId);
 		}
-		return null;
+		throw new TheatreAdminNotFound("Theatre Admin Not Found Check Your Login Credentials..");
 	}
 	
 	public ResponseEntity<ResponseStructure<Theatre>> addScreenInTheatre(int screenId,String theatreAdminEmail,String theatreAdminPassword)
@@ -149,8 +146,8 @@ public class TheatreService
 				}
 				return null;//theatre not updated
 			}
-			return null;//theatre not found
+			throw new TheatreNotFound("Theatre Not Found In Given Theatre Id : "+theatreId);
 		}
-		return null;
+		throw new TheatreAdminNotFound("Theatre Admin Not Found Check Your Login Credentials..");
 	}
 }

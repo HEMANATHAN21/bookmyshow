@@ -13,6 +13,9 @@ import com.spring.bookmyshow.dao.UserDao;
 import com.spring.bookmyshow.entity.Movie;
 import com.spring.bookmyshow.entity.Review;
 import com.spring.bookmyshow.entity.User;
+import com.spring.bookmyshow.exception.MovieNotFound;
+import com.spring.bookmyshow.exception.ReviewNotFound;
+import com.spring.bookmyshow.exception.UserNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -56,11 +59,11 @@ public class ReviewService
 					structure.setData(reviewNew);
 					return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.CREATED);
 				}
-				return null;
+				return null;//not saved
 			}
-			return null;
+			throw new MovieNotFound("Movie not found in Given MovieId : "+movieId);
 		}
-		return null;
+		throw new UserNotFound("User Not Found Check Your Login Credentials..");
 		
 	}
 	
@@ -78,9 +81,9 @@ public class ReviewService
 				structure.setData(review);
 				return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.FOUND);
 			}
-			return null;
+			throw new ReviewNotFound("Review not found in Given ReviewId : "+reviewId);
 		}
-		return null;
+		throw new UserNotFound("User Not Found Check Your Login Credentials..");
 		
 	}
 	
@@ -101,11 +104,11 @@ public class ReviewService
 					structure.setData(deletedReview);
 					return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.OK);
 				}
-				return null;
+				return null;//not deleted
 			}
-			return null;
+			throw new ReviewNotFound("Review not found in Given ReviewId : "+reviewId);
 		}
-		return null;
+		throw new UserNotFound("User Not Found Check Your Login Credentials..");
 	}
 	
 	public ResponseEntity<ResponseStructure<Review>> updateReview(Review review, int reviewId,String userEmail,String userPassword)
@@ -125,10 +128,10 @@ public class ReviewService
 					structure.setData(updateReview);
 					return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.OK);
 				}
-				return null;
+				return null;//not updated
 			}
-			return null;
+			throw new ReviewNotFound("Review not found in Given ReviewId : "+reviewId);
 		}
-		return null;
+		throw new UserNotFound("User Not Found Check Your Login Credentials..");
 	}
 }

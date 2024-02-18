@@ -45,5 +45,11 @@ public class AdminBookMyShowController
 	{
 		return adminBmsService.updateAdminBookMyShow(adminBookMyShow,adminBmsId);
 	}
+	
+	@PutMapping("assigntheatreinadminbms")
+	public ResponseEntity<ResponseStructure<AdminBookMyShowDto>> assignTheatreInAdminBms(@RequestParam String adminBmsMail,@RequestParam String adminBmsPassword,@RequestParam int theatreId)
+	{
+		return adminBmsService.assignTheatreInAdminBms(adminBmsMail, adminBmsPassword, theatreId);
+	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.spring.bookmyshow.dao.UserDao;
 import com.spring.bookmyshow.dto.UserDto;
 import com.spring.bookmyshow.entity.User;
+import com.spring.bookmyshow.exception.UserNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -32,7 +33,7 @@ public class UserService
 			structure.setData(dto);
 			return new ResponseEntity<ResponseStructure<UserDto>>(structure,HttpStatus.CREATED);
 		}
-		return null;
+		return null;//user not saved
 	}
 	
 	public ResponseEntity<ResponseStructure<UserDto>> findUser(int userId)
@@ -49,7 +50,7 @@ public class UserService
 			structure.setData(dto);
 			return new ResponseEntity<ResponseStructure<UserDto>>(structure,HttpStatus.FOUND);
 		}
-		return null;
+		throw new UserNotFound("User Not Found In Given User Id : "+userId);
 	}
 	
 	public ResponseEntity<ResponseStructure<UserDto>> deleteUser(int userId)
@@ -69,9 +70,9 @@ public class UserService
 				structure.setData(dto);
 				return new ResponseEntity<ResponseStructure<UserDto>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not deleted
 		}
-		return null;
+		throw new UserNotFound("User Not Found In Given User Id : "+userId);
 	}
 	
 	public ResponseEntity<ResponseStructure<UserDto>> updateUser(User user, int userId)
@@ -91,9 +92,9 @@ public class UserService
 				structure.setData(dto);
 				return new ResponseEntity<ResponseStructure<UserDto>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not updated
 		}
-		return null;
+		throw new UserNotFound("User Not Found In Given User Id : "+userId);
 	}
 	
 	public User userLogin(String userEmail,String userPassword)

@@ -12,6 +12,7 @@ import com.spring.bookmyshow.dao.TheatreAdminDao;
 import com.spring.bookmyshow.dao.TheatreDao;
 import com.spring.bookmyshow.dto.TheatreAdminDto;
 import com.spring.bookmyshow.entity.TheatreAdmin;
+import com.spring.bookmyshow.exception.TheatreAdminNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -36,7 +37,7 @@ public class TheatreAdminService
 			structure.setData(dto);
 			return new ResponseEntity<ResponseStructure<TheatreAdminDto>>(structure,HttpStatus.CREATED);
 		}
-		return null;
+		return null;//not saved
 	}
 	
 	public ResponseEntity<ResponseStructure<TheatreAdminDto>> findTheatreAdmin(int theatreAdminId)
@@ -53,7 +54,7 @@ public class TheatreAdminService
 			structure.setData(dto);
 			return new ResponseEntity<ResponseStructure<TheatreAdminDto>>(structure,HttpStatus.FOUND);
 		}
-		return null;
+		throw new TheatreAdminNotFound("TheatreAdmin Not Found In Given theatreId : "+theatreAdminId);
 	}
 	
 	public ResponseEntity<ResponseStructure<TheatreAdminDto>> deleteTheatreAdmin(int theatreAdminId)
@@ -73,9 +74,9 @@ public class TheatreAdminService
 				structure.setData(dto);
 				return new ResponseEntity<ResponseStructure<TheatreAdminDto>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not deleted
 		}
-		return null;
+		throw new TheatreAdminNotFound("TheatreAdmin Not Found In Given theatreId : "+theatreAdminId);
 	}
 	
 	public ResponseEntity<ResponseStructure<TheatreAdminDto>> updateTheatreAdmin(TheatreAdmin theatreAdmin, int theatreAdminId)
@@ -95,9 +96,9 @@ public class TheatreAdminService
 				structure.setData(dto);
 				return new ResponseEntity<ResponseStructure<TheatreAdminDto>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not updated
 		}
-		return null;
+		throw new TheatreAdminNotFound("TheatreAdmin Not Found In Given theatreId : "+theatreAdminId);
 	}
 	
 	public TheatreAdmin theatreAdminLogin(String theatreAdminEmail, String theatreAdminPassword)
@@ -113,8 +114,9 @@ public class TheatreAdminService
 					{
 						return theatreAdmin;
 					}
+					return null;//wrong password
 				}
-				return null;//
+				return null;//wrong email
 			}
 		}
 		return null;//list empty

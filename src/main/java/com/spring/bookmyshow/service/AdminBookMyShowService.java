@@ -9,8 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.spring.bookmyshow.dao.AdminBookMyShowDao;
+import com.spring.bookmyshow.dao.TheatreDao;
 import com.spring.bookmyshow.dto.AdminBookMyShowDto;
 import com.spring.bookmyshow.entity.AdminBookMyShow;
+import com.spring.bookmyshow.entity.Theatre;
+import com.spring.bookmyshow.exception.AdminBookMyShowNotFound;
+import com.spring.bookmyshow.exception.TheatreNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -18,6 +22,8 @@ public class AdminBookMyShowService
 {
 	@Autowired
 	AdminBookMyShowDao adminBmsDao;
+	@Autowired
+	TheatreDao theatreDao;
 	
 	public ResponseEntity<ResponseStructure<AdminBookMyShowDto>> saveAdminBookMyShow(AdminBookMyShow adminBookMyShow)
 	{
@@ -33,7 +39,7 @@ public class AdminBookMyShowService
 			structure.setData(adminBmsDto);
 			return new ResponseEntity<ResponseStructure<AdminBookMyShowDto>>(structure,HttpStatus.CREATED);
 		}
-		return null;
+		return null;//not saved
 	}
 	
 	public ResponseEntity<ResponseStructure<AdminBookMyShowDto>> findAdminBookMyShow(int adminBmsId)
@@ -50,7 +56,7 @@ public class AdminBookMyShowService
 			structure.setData(dto);
 			return new ResponseEntity<ResponseStructure<AdminBookMyShowDto>>(structure,HttpStatus.FOUND);
 		}
-		return null;
+		throw new AdminBookMyShowNotFound("AdminBookMyShow Not Fount In Given Id : "+adminBmsId);
 	}
 	
 	public ResponseEntity<ResponseStructure<AdminBookMyShowDto>> deleteAdminBookMyShow(int adminBmsId)
@@ -70,9 +76,9 @@ public class AdminBookMyShowService
 				structure.setData(dto);
 				return new ResponseEntity<ResponseStructure<AdminBookMyShowDto>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not deleted
 		}
-		return null;
+		throw new AdminBookMyShowNotFound("AdminBookMyShow Not Fount In Given Id : "+adminBmsId);
 	}
 	
 	public ResponseEntity<ResponseStructure<AdminBookMyShowDto>> updateAdminBookMyShow(AdminBookMyShow adminBookMyShow, int adminBmsId)
@@ -92,9 +98,9 @@ public class AdminBookMyShowService
 				structure.setData(dto);
 				return new ResponseEntity<ResponseStructure<AdminBookMyShowDto>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not updated
 		}
-		return null;
+		throw new AdminBookMyShowNotFound("AdminBookMyShow Not Fount In Given Id : "+adminBmsId);
 	}
 	
 	public AdminBookMyShow adminBmsLogin(String adminBmsMail, String adminBmsPassword)
@@ -116,5 +122,34 @@ public class AdminBookMyShowService
 			}
 		}
 		return null;//list Empty
+	}
+	
+	public ResponseEntity<ResponseStructure<AdminBookMyShowDto>> assignTheatreInAdminBms(String adminBmsMail,String adminBmsPassword,int theatreId)
+	{
+		AdminBookMyShow exAdminBms = adminBmsDao.findByEmail(adminBmsMail, adminBmsPassword);
+		if(exAdminBms != null)
+		{
+			Theatre exTheatre = theatreDao.findTheatre(theatreId);
+			if(exTheatre != null)
+			{
+				List<Theatre> theatreList = exAdminBms.getBmsTheatres();
+				theatreList.add(exTheatre);
+				AdminBookMyShow updateAdminBms = adminBmsDao.updateAdminBookMyShow(exAdminBms, exAdminBms.getAdminBmsId());
+				if(updateAdminBms != null)
+				{
+					AdminBookMyShowDto dto = new AdminBookMyShowDto();
+					ModelMapper mapper = new ModelMapper();
+					mapper.map(updateAdminBms, dto);
+					ResponseStructure<AdminBookMyShowDto> structure = new ResponseStructure<>();
+					structure.setMessage("Admin Book My Show Updated");
+					structure.setStatus(HttpStatus.OK.value());
+					structure.setData(dto);
+					return new ResponseEntity<ResponseStructure<AdminBookMyShowDto>>(structure,HttpStatus.OK);
+				}
+				return null;//not updated
+			}
+			throw new TheatreNotFound("Theatre Not Found In Given theatreId : "+theatreId);
+		}
+		throw new AdminBookMyShowNotFound("AdminBookMyShow Not Found Check Your Login Credentials..");
 	}
 }

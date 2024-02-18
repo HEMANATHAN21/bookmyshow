@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.bookmyshow.dao.SeatDao;
 import com.spring.bookmyshow.entity.Seat;
+import com.spring.bookmyshow.exception.SeatNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -26,7 +27,7 @@ public class SeatService
 			structure.setData(seatNew);
 			return new ResponseEntity<ResponseStructure<Seat>>(structure,HttpStatus.CREATED);
 		}
-		return null;
+		return null;//seat not saved
 	}
 	
 	public ResponseEntity<ResponseStructure<Seat>> findSeat(int seatId)
@@ -40,7 +41,7 @@ public class SeatService
 			structure.setData(seatfind);
 			return new ResponseEntity<ResponseStructure<Seat>>(structure,HttpStatus.FOUND);
 		}
-		return null;
+		throw new SeatNotFound("Seat Not Found In Given Id : "+seatId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Seat>> deleteseat(int seatId)
@@ -57,9 +58,9 @@ public class SeatService
 				structure.setData(deletedSeat);
 				return new ResponseEntity<ResponseStructure<Seat>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not deleted
 		}
-		return null;
+		throw new SeatNotFound("Seat Not Found In Given Id : "+seatId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Seat>> updateSeat(Seat seat, int seatId)
@@ -77,8 +78,8 @@ public class SeatService
 				return new ResponseEntity<ResponseStructure<Seat>>(structure,HttpStatus.OK);
 				
 			}
-			return null;
+			return null;//not updated
 		}
-		return null;
+		throw new SeatNotFound("Seat Not Found In Given Id : "+seatId);
 	}
 }

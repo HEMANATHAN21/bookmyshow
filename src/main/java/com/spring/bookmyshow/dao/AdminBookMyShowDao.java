@@ -49,4 +49,9 @@ public class AdminBookMyShowDao
 	{
 		return adminBmsRepo.findAll();
 	}
+	
+	public AdminBookMyShow findByEmail(String adminBmsMail,String adminBmsPassword)
+	{
+		return adminBmsRepo.findByEmail(adminBmsMail, adminBmsPassword);
+	}
 }

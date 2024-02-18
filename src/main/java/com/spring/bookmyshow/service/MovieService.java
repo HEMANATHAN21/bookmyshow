@@ -8,6 +8,8 @@ import com.spring.bookmyshow.dao.MovieDao;
 import com.spring.bookmyshow.dao.TheatreAdminDao;
 import com.spring.bookmyshow.entity.Movie;
 import com.spring.bookmyshow.entity.TheatreAdmin;
+import com.spring.bookmyshow.exception.MovieNotFound;
+import com.spring.bookmyshow.exception.TheatreAdminNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -32,9 +34,9 @@ public class MovieService
 				structure.setData(movieNew);
 				return new ResponseEntity<ResponseStructure<Movie>>(structure,HttpStatus.CREATED);
 			}
-			return null;
+			return null;//not saved
 		}
-		return null;
+		throw new TheatreAdminNotFound("TheatreAdmin Not Found Check Your Login Credentials...");
 		
 	}
 	
@@ -52,9 +54,9 @@ public class MovieService
 				structure.setData(movie);
 				return new ResponseEntity<ResponseStructure<Movie>>(structure,HttpStatus.FOUND);
 			}
-			return null;
+			throw new MovieNotFound("Movie Not Found In Give Id : "+movieId);
 		}
-		return null;
+		throw new TheatreAdminNotFound("TheatreAdmin Not Found Check Your Login Credentials...");
 	}
 	
 	public ResponseEntity<ResponseStructure<Movie>> deleteMovie(int movieId,String theatreAdminEmail, String theatreAdminPassword)
@@ -74,11 +76,11 @@ public class MovieService
 					structure.setData(deletedMovie);
 					return new ResponseEntity<ResponseStructure<Movie>>(structure,HttpStatus.OK);
 				}
-				return null;
+				return null;//not deleted
 			}
-			return null;
+			throw new MovieNotFound("Movie Not Found In Give Id : "+movieId);
 		}
-		return null;
+		throw new TheatreAdminNotFound("TheatreAdmin Not Found Check Your Login Credentials...");
 	}
 	
 	public ResponseEntity<ResponseStructure<Movie>> updateMovie(Movie movie, int movieId,String theatreAdminEmail, String theatreAdminPassword)
@@ -98,10 +100,10 @@ public class MovieService
 					structure.setData(updateMovie);
 					return new ResponseEntity<ResponseStructure<Movie>>(structure,HttpStatus.OK);
 				}
-				return null;
+				return null;//not updated
 			}
-			return null;
+			throw new MovieNotFound("Movie Not Found In Give Id : "+movieId);
 		}
-		return null;
+		throw new TheatreAdminNotFound("TheatreAdmin Not Found Check Your Login Credentials...");
 	}
 }

@@ -21,6 +21,9 @@ import com.spring.bookmyshow.entity.Seat;
 import com.spring.bookmyshow.entity.SeatType;
 import com.spring.bookmyshow.entity.Ticket;
 import com.spring.bookmyshow.entity.User;
+import com.spring.bookmyshow.exception.BookingNotFound;
+import com.spring.bookmyshow.exception.ScreenShowNotFound;
+import com.spring.bookmyshow.exception.UserNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
 @Service
 public class BookingService 
@@ -51,7 +54,7 @@ public class BookingService
 			structure.setData(bookingNew);
 			return new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.CREATED);
 		}
-		return null;
+		return null;//not saved
 	}
 	
 	public ResponseEntity<ResponseStructure<Booking>> findBooking(int bookingId)
@@ -65,7 +68,7 @@ public class BookingService
 			structure.setData(booking);
 			return new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.FOUND);
 		}
-		return null;
+		throw new BookingNotFound("Booking Not Found In Given BookinId : "+bookingId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Booking>> deleteBooking(int bookingId)
@@ -82,9 +85,9 @@ public class BookingService
 				structure.setData(deletedBooking);
 				return new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not deleted
 		}
-		return null;
+		throw new BookingNotFound("Booking Not Found In Given BookinId : "+bookingId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Booking>> updateBooking(Booking booking, int bookingId)
@@ -101,9 +104,9 @@ public class BookingService
 				structure.setData(updateBooking);
 				return new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not updated
 		}
-		return null;
+		throw new BookingNotFound("Booking Not Found In Given BookinId : "+bookingId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Booking>> bookingMovie(Booking booking,String userEmail,String userPassword,int screenShowhowId)
@@ -176,10 +179,11 @@ public class BookingService
 					structure.setData(booking);
 					return new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.CREATED);
 				}
-				return null;
+				return null;//not saved
 			}
+			throw new ScreenShowNotFound("ScreenShow not found in Given Id : "+screenShowhowId);
 		}
-		return null;
+		throw new UserNotFound("User Not Found Check Your Login Credentials..");
 	}
 	
 	

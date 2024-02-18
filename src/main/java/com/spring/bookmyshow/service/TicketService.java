@@ -18,6 +18,8 @@ import com.spring.bookmyshow.entity.ScreenShow;
 import com.spring.bookmyshow.entity.Seat;
 import com.spring.bookmyshow.entity.Ticket;
 import com.spring.bookmyshow.entity.User;
+import com.spring.bookmyshow.exception.TicketNotFound;
+import com.spring.bookmyshow.exception.UserNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -45,7 +47,7 @@ public class TicketService
 			structure.setData(ticketNew);
 			return new ResponseEntity<ResponseStructure<Ticket>>(structure,HttpStatus.CREATED);
 		}
-		return null;
+		return null;//not saved
 	}
 	
 	public ResponseEntity<ResponseStructure<Ticket>> findTicket(int ticketId)
@@ -59,7 +61,7 @@ public class TicketService
 			structure.setData(ticket);
 			return new ResponseEntity<ResponseStructure<Ticket>>(structure,HttpStatus.FOUND);
 		}
-		return null;
+		throw new TicketNotFound("Ticket Not Found in Given TicketId : "+ticketId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Ticket>> deleteTicket(int ticketId)
@@ -76,9 +78,9 @@ public class TicketService
 				structure.setData(deletedTicket);
 				return new ResponseEntity<ResponseStructure<Ticket>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not deleted
 		}
-		return null;
+		throw new TicketNotFound("Ticket Not Found in Given TicketId : "+ticketId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Ticket>> updateTicket(Ticket ticket, int ticketId)
@@ -95,9 +97,9 @@ public class TicketService
 				structure.setData(updateTicket);
 				return new ResponseEntity<ResponseStructure<Ticket>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not updated
 		}
-		return null;
+		throw new TicketNotFound("Ticket Not Found in Given TicketId : "+ticketId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Ticket>> cancelTicket(String userEmail,String userPassword,int ticketId)
@@ -111,12 +113,9 @@ public class TicketService
 				Booking exBooking = bookingDao.findBooking(exTicket.getBooking().getBookingId());
 				List<Seat> listOfSeats = exTicket.getSeats();
 				List<Seat> storedSeatList = new ArrayList<>();
-				if(!listOfSeats.isEmpty())
+				for (Seat seat : listOfSeats) 
 				{
-					for (Seat seat : listOfSeats) 
-					{
-						storedSeatList.add(seat);
-					}
+					storedSeatList.add(seat);
 				}
 				int showId = exBooking.getShowId();
 				int[] bookingSeatIndexes = exBooking.getBookingSeatIndexes();
@@ -166,10 +165,10 @@ public class TicketService
 					structure.setData(deletedTicket);
 					return new ResponseEntity<ResponseStructure<Ticket>>(structure,HttpStatus.OK);
 				}
-				return null;
+				return null;//ticket not deleted
 			}
-			return null;
+			throw new TicketNotFound("Ticket Not Found in Given TicketId : "+ticketId);
 		}
-		return null;
+		throw new UserNotFound("User Not Found Check Your Login Credentials..");
 	}
 }

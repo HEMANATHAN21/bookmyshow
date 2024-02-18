@@ -16,6 +16,9 @@ import com.spring.bookmyshow.dao.UserDao;
 import com.spring.bookmyshow.entity.Screen;
 import com.spring.bookmyshow.entity.Theatre;
 import com.spring.bookmyshow.entity.TheatreAdmin;
+import com.spring.bookmyshow.exception.ScreenNotFound;
+import com.spring.bookmyshow.exception.TheatreAdminNotFound;
+import com.spring.bookmyshow.exception.TheatreNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -51,11 +54,11 @@ public class ScreenService
 					structure.setData(saveScreen);
 					return new ResponseEntity<ResponseStructure<Screen>>(structure,HttpStatus.CREATED);
 				}
-				return null;
+				return null;//not saved
 			}
-			return null;
+			throw new TheatreNotFound("Theatre Not Found in Given Theatre Id : "+exTheatreAdmin.getAdminTheatre().getTheatreId());
 		}
-		return null;
+		throw new TheatreAdminNotFound("TheatreAdmin Not Found Check Your Login Credentials....");
 		
 	}
 	
@@ -70,7 +73,7 @@ public class ScreenService
 			structure.setData(screen);
 			return new ResponseEntity<ResponseStructure<Screen>>(structure,HttpStatus.FOUND);
 		}
-		return null;
+		throw new ScreenNotFound("Screen Not Found In Given ScreenId : "+screenId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Screen>> deleteScreen(int screenId)
@@ -87,9 +90,9 @@ public class ScreenService
 				structure.setData(deletedScreen);
 				return new ResponseEntity<ResponseStructure<Screen>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not deleted
 		}
-		return null;
+		throw new ScreenNotFound("Screen Not Found In Given ScreenId : "+screenId);
 	}
 	
 	public ResponseEntity<ResponseStructure<Screen>> updateScreen(Screen screen, int screenId)
@@ -106,9 +109,9 @@ public class ScreenService
 				structure.setData(updateScreen);
 				return new ResponseEntity<ResponseStructure<Screen>>(structure,HttpStatus.OK);
 			}
-			return null;
+			return null;//not updated
 		}
-		return null;
+		throw new ScreenNotFound("Screen Not Found In Given ScreenId : "+screenId);
 	}
 	
 	
