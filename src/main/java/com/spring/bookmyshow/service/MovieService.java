@@ -9,6 +9,9 @@ import com.spring.bookmyshow.dao.TheatreAdminDao;
 import com.spring.bookmyshow.entity.Movie;
 import com.spring.bookmyshow.entity.TheatreAdmin;
 import com.spring.bookmyshow.exception.MovieNotFound;
+import com.spring.bookmyshow.exception.NotDeleted;
+import com.spring.bookmyshow.exception.NotSaved;
+import com.spring.bookmyshow.exception.NotUpdated;
 import com.spring.bookmyshow.exception.TheatreAdminNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
 
@@ -34,7 +37,7 @@ public class MovieService
 				structure.setData(movieNew);
 				return new ResponseEntity<ResponseStructure<Movie>>(structure,HttpStatus.CREATED);
 			}
-			return null;//not saved
+			throw new NotSaved("Movie Not Saved");
 		}
 		throw new TheatreAdminNotFound("TheatreAdmin Not Found Check Your Login Credentials...");
 		
@@ -76,7 +79,7 @@ public class MovieService
 					structure.setData(deletedMovie);
 					return new ResponseEntity<ResponseStructure<Movie>>(structure,HttpStatus.OK);
 				}
-				return null;//not deleted
+				throw new NotDeleted("Movie Not Deleted");
 			}
 			throw new MovieNotFound("Movie Not Found In Give Id : "+movieId);
 		}
@@ -100,7 +103,7 @@ public class MovieService
 					structure.setData(updateMovie);
 					return new ResponseEntity<ResponseStructure<Movie>>(structure,HttpStatus.OK);
 				}
-				return null;//not updated
+				throw new NotUpdated("Movie Not Updated");
 			}
 			throw new MovieNotFound("Movie Not Found In Give Id : "+movieId);
 		}

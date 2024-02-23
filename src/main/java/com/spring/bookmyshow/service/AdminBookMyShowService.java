@@ -13,8 +13,14 @@ import com.spring.bookmyshow.dao.TheatreDao;
 import com.spring.bookmyshow.dto.AdminBookMyShowDto;
 import com.spring.bookmyshow.entity.AdminBookMyShow;
 import com.spring.bookmyshow.entity.Theatre;
+import com.spring.bookmyshow.exception.AdminBookMyShowNotDeleted;
 import com.spring.bookmyshow.exception.AdminBookMyShowNotFound;
+import com.spring.bookmyshow.exception.AdminBookMyShowNotSaved;
+import com.spring.bookmyshow.exception.AdminBookMyShowNotUpdated;
+import com.spring.bookmyshow.exception.EmailNotFound;
+import com.spring.bookmyshow.exception.EmptyList;
 import com.spring.bookmyshow.exception.TheatreNotFound;
+import com.spring.bookmyshow.exception.WrongPassword;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -39,7 +45,7 @@ public class AdminBookMyShowService
 			structure.setData(adminBmsDto);
 			return new ResponseEntity<ResponseStructure<AdminBookMyShowDto>>(structure,HttpStatus.CREATED);
 		}
-		return null;//not saved
+		throw new AdminBookMyShowNotSaved("Admin BookMyShow Not Saved");
 	}
 	
 	public ResponseEntity<ResponseStructure<AdminBookMyShowDto>> findAdminBookMyShow(int adminBmsId)
@@ -76,7 +82,7 @@ public class AdminBookMyShowService
 				structure.setData(dto);
 				return new ResponseEntity<ResponseStructure<AdminBookMyShowDto>>(structure,HttpStatus.OK);
 			}
-			return null;//not deleted
+			throw new AdminBookMyShowNotDeleted("Admin BookMyShow Not Deleted");
 		}
 		throw new AdminBookMyShowNotFound("AdminBookMyShow Not Fount In Given Id : "+adminBmsId);
 	}
@@ -98,7 +104,7 @@ public class AdminBookMyShowService
 				structure.setData(dto);
 				return new ResponseEntity<ResponseStructure<AdminBookMyShowDto>>(structure,HttpStatus.OK);
 			}
-			return null;//not updated
+			throw new AdminBookMyShowNotUpdated("Admin BookMyShow Not Updated");
 		}
 		throw new AdminBookMyShowNotFound("AdminBookMyShow Not Fount In Given Id : "+adminBmsId);
 	}
@@ -116,12 +122,12 @@ public class AdminBookMyShowService
 					{
 						return adminBookMyShow;
 					}
-					return null;//password wrong
+					throw new WrongPassword("Entered Wrong Password "+adminBmsPassword);
 				}
-				return null;//email invalid or not found
+				throw new EmailNotFound("Entered Email Not Available In DataBase "+adminBmsMail);
 			}
 		}
-		return null;//list Empty
+		throw new EmptyList("Admin BookMyShow List Is Empty");
 	}
 	
 	public ResponseEntity<ResponseStructure<AdminBookMyShowDto>> assignTheatreInAdminBms(String adminBmsMail,String adminBmsPassword,int theatreId)
@@ -146,7 +152,7 @@ public class AdminBookMyShowService
 					structure.setData(dto);
 					return new ResponseEntity<ResponseStructure<AdminBookMyShowDto>>(structure,HttpStatus.OK);
 				}
-				return null;//not updated
+				throw new AdminBookMyShowNotUpdated("Admin BookMyShow Not Updated");
 			}
 			throw new TheatreNotFound("Theatre Not Found In Given theatreId : "+theatreId);
 		}

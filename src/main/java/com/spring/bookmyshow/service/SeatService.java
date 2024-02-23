@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.spring.bookmyshow.dao.SeatDao;
 import com.spring.bookmyshow.entity.Seat;
+import com.spring.bookmyshow.exception.NotDeleted;
+import com.spring.bookmyshow.exception.NotSaved;
+import com.spring.bookmyshow.exception.NotUpdated;
 import com.spring.bookmyshow.exception.SeatNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
 
@@ -27,7 +30,7 @@ public class SeatService
 			structure.setData(seatNew);
 			return new ResponseEntity<ResponseStructure<Seat>>(structure,HttpStatus.CREATED);
 		}
-		return null;//seat not saved
+		throw new NotSaved("Seat Not Saved");
 	}
 	
 	public ResponseEntity<ResponseStructure<Seat>> findSeat(int seatId)
@@ -58,7 +61,7 @@ public class SeatService
 				structure.setData(deletedSeat);
 				return new ResponseEntity<ResponseStructure<Seat>>(structure,HttpStatus.OK);
 			}
-			return null;//not deleted
+			throw new NotDeleted("Seat Not Deleted");
 		}
 		throw new SeatNotFound("Seat Not Found In Given Id : "+seatId);
 	}
@@ -78,7 +81,7 @@ public class SeatService
 				return new ResponseEntity<ResponseStructure<Seat>>(structure,HttpStatus.OK);
 				
 			}
-			return null;//not updated
+			throw new NotUpdated("Seat Not Updated");
 		}
 		throw new SeatNotFound("Seat Not Found In Given Id : "+seatId);
 	}

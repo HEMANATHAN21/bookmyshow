@@ -14,6 +14,9 @@ import com.spring.bookmyshow.entity.Movie;
 import com.spring.bookmyshow.entity.Review;
 import com.spring.bookmyshow.entity.User;
 import com.spring.bookmyshow.exception.MovieNotFound;
+import com.spring.bookmyshow.exception.NotDeleted;
+import com.spring.bookmyshow.exception.NotSaved;
+import com.spring.bookmyshow.exception.NotUpdated;
 import com.spring.bookmyshow.exception.ReviewNotFound;
 import com.spring.bookmyshow.exception.UserNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
@@ -59,7 +62,7 @@ public class ReviewService
 					structure.setData(reviewNew);
 					return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.CREATED);
 				}
-				return null;//not saved
+				throw new NotSaved("Review Not Saved");
 			}
 			throw new MovieNotFound("Movie not found in Given MovieId : "+movieId);
 		}
@@ -104,7 +107,7 @@ public class ReviewService
 					structure.setData(deletedReview);
 					return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.OK);
 				}
-				return null;//not deleted
+				throw new NotDeleted("Review Not Deleted For Given Id : "+reviewId);
 			}
 			throw new ReviewNotFound("Review not found in Given ReviewId : "+reviewId);
 		}
@@ -128,7 +131,7 @@ public class ReviewService
 					structure.setData(updateReview);
 					return new ResponseEntity<ResponseStructure<Review>>(structure,HttpStatus.OK);
 				}
-				return null;//not updated
+				throw new NotUpdated("Review Not Updated For Given ReviewId : "+reviewId);
 			}
 			throw new ReviewNotFound("Review not found in Given ReviewId : "+reviewId);
 		}

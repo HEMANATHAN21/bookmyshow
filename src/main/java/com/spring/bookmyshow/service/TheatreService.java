@@ -13,6 +13,9 @@ import com.spring.bookmyshow.dao.TheatreDao;
 import com.spring.bookmyshow.entity.Screen;
 import com.spring.bookmyshow.entity.Theatre;
 import com.spring.bookmyshow.entity.TheatreAdmin;
+import com.spring.bookmyshow.exception.NotDeleted;
+import com.spring.bookmyshow.exception.NotSaved;
+import com.spring.bookmyshow.exception.NotUpdated;
 import com.spring.bookmyshow.exception.TheatreAdminNotFound;
 import com.spring.bookmyshow.exception.TheatreNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
@@ -41,7 +44,7 @@ public class TheatreService
 			structure.setData(theatreNew);
 			return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.CREATED);
 		}
-		return null;//not saved
+		throw new NotSaved("Theatre Not Saved");
 	}
 	
 	public ResponseEntity<ResponseStructure<Theatre>> findTheatre(int theatreId)
@@ -72,7 +75,7 @@ public class TheatreService
 				structure.setData(deletedTheatre);
 				return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
 			}
-			return null;//not deleted
+			throw new NotDeleted("Theatre Not Deleted For Given Id : "+theatreId);
 		}
 		throw new TheatreNotFound("Theatre Not Found In Given Theatre Id : "+theatreId);
 	}
@@ -91,7 +94,7 @@ public class TheatreService
 				structure.setData(updateTheatre);
 				return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
 			}
-			return null;//not updated
+			throw new NotUpdated("Theatre Not Updated For Given Theatre Id : "+theatreId);
 		}
 		throw new TheatreNotFound("Theatre Not Found In Given Theatre Id : "+theatreId);
 	}
@@ -115,7 +118,7 @@ public class TheatreService
 					structure.setData(updatedTheatre);
 					return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
 				}
-				return null; //theatre  not updated
+				throw new NotUpdated("Theatre Not Updated For Given Theatre Id : "+theatreId);
 			}
 			throw new TheatreNotFound("Theatre Not Found In Given Theatre Id : "+theatreId);
 		}
@@ -144,7 +147,7 @@ public class TheatreService
 					structure.setData(updatedTheatre);
 					return new ResponseEntity<ResponseStructure<Theatre>>(structure,HttpStatus.OK);
 				}
-				return null;//theatre not updated
+				throw new NotUpdated("Theatre Not Updated For Given Theatre Id : "+theatreId);
 			}
 			throw new TheatreNotFound("Theatre Not Found In Given Theatre Id : "+theatreId);
 		}

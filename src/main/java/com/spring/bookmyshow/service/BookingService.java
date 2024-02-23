@@ -22,6 +22,10 @@ import com.spring.bookmyshow.entity.SeatType;
 import com.spring.bookmyshow.entity.Ticket;
 import com.spring.bookmyshow.entity.User;
 import com.spring.bookmyshow.exception.BookingNotFound;
+import com.spring.bookmyshow.exception.BookingNotSaved;
+import com.spring.bookmyshow.exception.NotDeleted;
+import com.spring.bookmyshow.exception.NotSaved;
+import com.spring.bookmyshow.exception.NotUpdated;
 import com.spring.bookmyshow.exception.ScreenShowNotFound;
 import com.spring.bookmyshow.exception.UserNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
@@ -54,7 +58,7 @@ public class BookingService
 			structure.setData(bookingNew);
 			return new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.CREATED);
 		}
-		return null;//not saved
+		throw new BookingNotSaved("Booking Not Saved");
 	}
 	
 	public ResponseEntity<ResponseStructure<Booking>> findBooking(int bookingId)
@@ -85,7 +89,7 @@ public class BookingService
 				structure.setData(deletedBooking);
 				return new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.OK);
 			}
-			return null;//not deleted
+			throw new NotDeleted("Booking Not Deleted For Given Id : "+bookingId);
 		}
 		throw new BookingNotFound("Booking Not Found In Given BookinId : "+bookingId);
 	}
@@ -104,7 +108,7 @@ public class BookingService
 				structure.setData(updateBooking);
 				return new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.OK);
 			}
-			return null;//not updated
+			throw new NotUpdated("Booking Not Updated For Given Id : "+bookingId);
 		}
 		throw new BookingNotFound("Booking Not Found In Given BookinId : "+bookingId);
 	}
@@ -179,7 +183,7 @@ public class BookingService
 					structure.setData(booking);
 					return new ResponseEntity<ResponseStructure<Booking>>(structure,HttpStatus.CREATED);
 				}
-				return null;//not saved
+				throw new NotSaved("Ticket Not Saved");
 			}
 			throw new ScreenShowNotFound("ScreenShow not found in Given Id : "+screenShowhowId);
 		}
