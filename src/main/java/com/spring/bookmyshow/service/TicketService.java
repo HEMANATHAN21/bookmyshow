@@ -18,6 +18,9 @@ import com.spring.bookmyshow.entity.ScreenShow;
 import com.spring.bookmyshow.entity.Seat;
 import com.spring.bookmyshow.entity.Ticket;
 import com.spring.bookmyshow.entity.User;
+import com.spring.bookmyshow.exception.NotDeleted;
+import com.spring.bookmyshow.exception.NotSaved;
+import com.spring.bookmyshow.exception.NotUpdated;
 import com.spring.bookmyshow.exception.TicketNotFound;
 import com.spring.bookmyshow.exception.UserNotFound;
 import com.spring.bookmyshow.util.ResponseStructure;
@@ -47,7 +50,7 @@ public class TicketService
 			structure.setData(ticketNew);
 			return new ResponseEntity<ResponseStructure<Ticket>>(structure,HttpStatus.CREATED);
 		}
-		return null;//not saved
+		throw new NotSaved("Ticket Not Saved");
 	}
 	
 	public ResponseEntity<ResponseStructure<Ticket>> findTicket(int ticketId)
@@ -78,7 +81,7 @@ public class TicketService
 				structure.setData(deletedTicket);
 				return new ResponseEntity<ResponseStructure<Ticket>>(structure,HttpStatus.OK);
 			}
-			return null;//not deleted
+			throw new NotDeleted("Ticket Not Deleted For Given Id : "+ticketId);
 		}
 		throw new TicketNotFound("Ticket Not Found in Given TicketId : "+ticketId);
 	}
@@ -97,7 +100,7 @@ public class TicketService
 				structure.setData(updateTicket);
 				return new ResponseEntity<ResponseStructure<Ticket>>(structure,HttpStatus.OK);
 			}
-			return null;//not updated
+			throw new NotUpdated("Ticket Not Updated For Given Id : "+ticketId);
 		}
 		throw new TicketNotFound("Ticket Not Found in Given TicketId : "+ticketId);
 	}
@@ -165,7 +168,7 @@ public class TicketService
 					structure.setData(deletedTicket);
 					return new ResponseEntity<ResponseStructure<Ticket>>(structure,HttpStatus.OK);
 				}
-				return null;//ticket not deleted
+				throw new NotDeleted("Ticket Not Deleted For Given Id :"+ticketId);
 			}
 			throw new TicketNotFound("Ticket Not Found in Given TicketId : "+ticketId);
 		}

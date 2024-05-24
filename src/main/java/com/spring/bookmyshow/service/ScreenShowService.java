@@ -20,6 +20,10 @@ import com.spring.bookmyshow.entity.SeatType;
 import com.spring.bookmyshow.entity.Theatre;
 import com.spring.bookmyshow.entity.TheatreAdmin;
 import com.spring.bookmyshow.entity.User;
+import com.spring.bookmyshow.exception.EmptyList;
+import com.spring.bookmyshow.exception.NotDeleted;
+import com.spring.bookmyshow.exception.NotSaved;
+import com.spring.bookmyshow.exception.NotUpdated;
 import com.spring.bookmyshow.exception.ScreenNotFound;
 import com.spring.bookmyshow.exception.ScreenShowNotFound;
 import com.spring.bookmyshow.exception.TheatreAdminNotFound;
@@ -73,9 +77,9 @@ public class ScreenShowService
 						structure.setData(showNew);
 						return new ResponseEntity<ResponseStructure<ScreenShow>>(structure,HttpStatus.CREATED);
 					}
-					return null;//screen not updated
+					throw new NotUpdated("Screen Not Updated"); //screen not updated
 				}
-				return null;//screenshow not saved
+				throw new NotSaved("ScreenShow Not Saved.."); //screenshow not saved
 			}
 			throw new TheatreNotFound("Theatre Not Found in Given Theatre Id : "+exTheatreAdmin.getAdminTheatre().getTheatreId());
 		}
@@ -110,7 +114,7 @@ public class ScreenShowService
 				structure.setData(deletedShow);
 				return new ResponseEntity<ResponseStructure<ScreenShow>>(structure,HttpStatus.OK);
 			}
-			return null;//show not deleted
+			throw new NotDeleted("ScreenShow Not Deleted");
 		}
 		throw new ScreenShowNotFound("Screen Show Not Found In Given Id : "+showId);
 	}
@@ -130,7 +134,7 @@ public class ScreenShowService
 				return new ResponseEntity<ResponseStructure<ScreenShow>>(structure,HttpStatus.OK);
 				
 			}
-			return null;//not updated
+			throw new NotUpdated("ScreenShow Not Updated");
 		}
 		throw new ScreenShowNotFound("Screen Show Not Found In Given Id : "+showId);
 	}
@@ -157,7 +161,7 @@ public class ScreenShowService
 				structure.setData(movieShowInfo);
 				return new ResponseEntity<ResponseStructure<List<ScreenShow>>>(structure,HttpStatus.FOUND);
 			}
-			return null;//empty list
+			throw new EmptyList("ShowScreen Details Not Found For Given Movie Name : "+movieName);
 		}
 		throw new UserNotFound("User Not Found Check Your Login Credential...");
 	}
@@ -227,14 +231,7 @@ public class ScreenShowService
 						return new ResponseEntity<ResponseStructure<List<Integer>>>(structure,HttpStatus.OK);
 
 					}
-					else
-					{
-						ResponseStructure<List<Integer>> structure = new ResponseStructure<>();
-						structure.setMessage("Not Available Seat  For "+seatType+" Seat Type");
-						structure.setData(seatAvailability);
-						structure.setStatus(HttpStatus.OK.value());
-						return new ResponseEntity<ResponseStructure<List<Integer>>>(structure,HttpStatus.OK);
-					}
+					throw new EmptyList("Seat Not Available  For "+seatType+" Seat Type");
 				}
 				throw new ScreenShowNotFound("ScreenShow not found in ScreenList Given Show Id Is : "+screenShowId);
 			}

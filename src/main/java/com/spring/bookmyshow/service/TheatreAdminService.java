@@ -12,7 +12,13 @@ import com.spring.bookmyshow.dao.TheatreAdminDao;
 import com.spring.bookmyshow.dao.TheatreDao;
 import com.spring.bookmyshow.dto.TheatreAdminDto;
 import com.spring.bookmyshow.entity.TheatreAdmin;
+import com.spring.bookmyshow.exception.EmailNotFound;
+import com.spring.bookmyshow.exception.EmptyList;
+import com.spring.bookmyshow.exception.NotDeleted;
+import com.spring.bookmyshow.exception.NotSaved;
+import com.spring.bookmyshow.exception.NotUpdated;
 import com.spring.bookmyshow.exception.TheatreAdminNotFound;
+import com.spring.bookmyshow.exception.WrongPassword;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -37,7 +43,7 @@ public class TheatreAdminService
 			structure.setData(dto);
 			return new ResponseEntity<ResponseStructure<TheatreAdminDto>>(structure,HttpStatus.CREATED);
 		}
-		return null;//not saved
+		throw new NotSaved("TheatreAdmin Not Saved");
 	}
 	
 	public ResponseEntity<ResponseStructure<TheatreAdminDto>> findTheatreAdmin(int theatreAdminId)
@@ -74,7 +80,7 @@ public class TheatreAdminService
 				structure.setData(dto);
 				return new ResponseEntity<ResponseStructure<TheatreAdminDto>>(structure,HttpStatus.OK);
 			}
-			return null;//not deleted
+			throw new NotDeleted("TheatreAdmin Not Deleted");
 		}
 		throw new TheatreAdminNotFound("TheatreAdmin Not Found In Given theatreId : "+theatreAdminId);
 	}
@@ -96,7 +102,7 @@ public class TheatreAdminService
 				structure.setData(dto);
 				return new ResponseEntity<ResponseStructure<TheatreAdminDto>>(structure,HttpStatus.OK);
 			}
-			return null;//not updated
+			throw new NotUpdated("TheatreAdmin Not Updated For Given Id : "+theatreAdminId);
 		}
 		throw new TheatreAdminNotFound("TheatreAdmin Not Found In Given theatreId : "+theatreAdminId);
 	}
@@ -114,12 +120,12 @@ public class TheatreAdminService
 					{
 						return theatreAdmin;
 					}
-					return null;//wrong password
+					throw new WrongPassword("Entered Wrong Password");
 				}
-				return null;//wrong email
+				throw new EmailNotFound("Email Not Found In Database You Entered Wrong Email");
 			}
 		}
-		return null;//list empty
+		throw new EmptyList("Empty List..");
 	}
 	
 }

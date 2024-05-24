@@ -34,7 +34,7 @@ public class TheatreAdmin
     @Pattern(regexp=".+@.+\\..+", message="Email address must contain @ symbol")
 	private String theatreAdminEmail;
 	
-	@Pattern(regexp="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", message="Password must be 8 digit")
+	@Pattern(regexp="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", message="Password must be 8 digit given all validations")
 	private String theatreAdminPassword;
 	
 	@OneToOne(cascade = CascadeType.ALL)

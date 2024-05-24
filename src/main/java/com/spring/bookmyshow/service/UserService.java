@@ -10,7 +10,13 @@ import org.springframework.stereotype.Service;
 import com.spring.bookmyshow.dao.UserDao;
 import com.spring.bookmyshow.dto.UserDto;
 import com.spring.bookmyshow.entity.User;
+import com.spring.bookmyshow.exception.EmailNotFound;
+import com.spring.bookmyshow.exception.EmptyList;
+import com.spring.bookmyshow.exception.NotDeleted;
+import com.spring.bookmyshow.exception.NotSaved;
+import com.spring.bookmyshow.exception.NotUpdated;
 import com.spring.bookmyshow.exception.UserNotFound;
+import com.spring.bookmyshow.exception.WrongPassword;
 import com.spring.bookmyshow.util.ResponseStructure;
 
 @Service
@@ -33,7 +39,7 @@ public class UserService
 			structure.setData(dto);
 			return new ResponseEntity<ResponseStructure<UserDto>>(structure,HttpStatus.CREATED);
 		}
-		return null;//user not saved
+		throw new NotSaved("User Not Saved");
 	}
 	
 	public ResponseEntity<ResponseStructure<UserDto>> findUser(int userId)
@@ -70,7 +76,7 @@ public class UserService
 				structure.setData(dto);
 				return new ResponseEntity<ResponseStructure<UserDto>>(structure,HttpStatus.OK);
 			}
-			return null;//not deleted
+			throw new NotDeleted("User Not Deleted For Given UserId : "+userId);
 		}
 		throw new UserNotFound("User Not Found In Given User Id : "+userId);
 	}
@@ -92,7 +98,7 @@ public class UserService
 				structure.setData(dto);
 				return new ResponseEntity<ResponseStructure<UserDto>>(structure,HttpStatus.OK);
 			}
-			return null;//not updated
+			throw new NotUpdated("User Not Updated For Given User Id :"+userId);
 		}
 		throw new UserNotFound("User Not Found In Given User Id : "+userId);
 	}
@@ -110,12 +116,12 @@ public class UserService
 					{
 						return user;
 					}
-					return null;//password wrong 
+					throw new WrongPassword("User Entered Wrong Password"); 
 				}
-				return null;//email wrong
+				throw new EmailNotFound("User Entered Email Not Found In Database Wrong Email");
 			}
 		}
-		return null;//list is empty
+		throw new EmptyList("User List Empty In Database");
 	}
 	
 	public User findByEmail(String userEmail, String userPassword)
